@@ -63,7 +63,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface
      */
     public function build(?string $identifier = null): array
     {
-        $identifier = $identifier ?? $this->identifier;
+        $identifier ??= $this->identifier;
 
         if (null === $identifier) {
             throw new NoIdentifierException();
