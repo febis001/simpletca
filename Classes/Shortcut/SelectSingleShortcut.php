@@ -9,6 +9,8 @@ use Febis\SimpleTca\Data\Field;
  */
 class SelectSingleShortcut extends AbstractShortcut
 {
+    protected ?array $items = null;
+    protected ?string $renderType = null;
     protected static function getType(): string
     {
         return "select";
@@ -34,9 +36,11 @@ class SelectSingleShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $label = null,
-        protected ?array $items = null,
-        protected ?string $renderType = null
+        ?array $items = null,
+        ?string $renderType = null
     ) {
+        $this->items = $items;
+        $this->renderType = $renderType;
         $this->renderType ??= 'selectSingle';
         parent::__construct($label);
     }

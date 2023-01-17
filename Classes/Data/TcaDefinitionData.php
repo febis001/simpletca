@@ -14,7 +14,10 @@ class TcaDefinitionData implements SingletonInterface
         return isset($this->tables[$identifier]);
     }
 
-    public function addTable(Table $table, string $identifier): static
+    /**
+     * @return $this
+     */
+    public function addTable(Table $table, string $identifier)
     {
         if ($this->hasTable($identifier)) {
             $this->tables[$identifier]->mergeWithOverrideTable($table);
@@ -25,7 +28,10 @@ class TcaDefinitionData implements SingletonInterface
         return $this;
     }
 
-    public function removeTable(string $identifier): static
+    /**
+     * @return $this
+     */
+    public function removeTable(string $identifier)
     {
         if (null !== $this->tables[$identifier] ?? null) {
             unset($this->tables[$identifier]);
@@ -44,7 +50,10 @@ class TcaDefinitionData implements SingletonInterface
         return $this->tables;
     }
 
-    public function clearTables(): static
+    /**
+     * @return $this
+     */
+    public function clearTables()
     {
         $this->tables = [];
 

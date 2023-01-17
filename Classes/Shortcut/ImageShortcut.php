@@ -12,6 +12,10 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  */
 class ImageShortcut extends AbstractShortcut
 {
+    protected ?int $minitems = null;
+    protected ?int $maxitems = null;
+    protected ?string $fieldName = null;
+    protected ?string $allowedFileExtensions = null;
     protected static function getType(): string
     {
         return "inline";
@@ -49,18 +53,20 @@ class ImageShortcut extends AbstractShortcut
         );
     }
 
-    public function __construct(
-        ?string $label = null,
-        protected ?int $minitems = null,
-        protected ?int $maxitems = null,
-        protected ?string $fieldName = null,
-        protected ?string $allowedFileExtensions = null,
-    ) {
+    public function __construct(?string $label = null, ?int $minitems = null, ?int $maxitems = null, ?string $fieldName = null, ?string $allowedFileExtensions = null)
+    {
+        $this->minitems = $minitems;
+        $this->maxitems = $maxitems;
+        $this->fieldName = $fieldName;
+        $this->allowedFileExtensions = $allowedFileExtensions;
         $this->withFieldName($this->fieldName);
         parent::__construct($label);
     }
 
-    public function withItemsRange(int $minitems = null, int $maxitems = null): static
+    /**
+     * @return $this
+     */
+    public function withItemsRange(int $minitems = null, int $maxitems = null)
     {
         $this->unsetAttributes['minitems'] = null === $minitems;
         $this->unsetAttributes['maxitems'] = null === $maxitems;
@@ -71,13 +77,19 @@ class ImageShortcut extends AbstractShortcut
         return $this;
     }
 
-    public function withFieldName($fieldName = null): static
+    /**
+     * @return $this
+     */
+    public function withFieldName($fieldName = null)
     {
         $this->fieldName = $fieldName ?? 'image';
         return $this;
     }
 
-    public function withAllowedFileExtension($allowedFileExtensions = null): static
+    /**
+     * @return $this
+     */
+    public function withAllowedFileExtension($allowedFileExtensions = null)
     {
         $this->allowedFileExtensions = $allowedFileExtensions;
         return $this;

@@ -33,9 +33,8 @@ class RteShortcut extends AbstractShortcut
         );
     }
 
-    public function __construct(
-        ?string $label = null,
-    ) {
+    public function __construct(?string $label = null)
+    {
         parent::__construct($label);
     }
 }

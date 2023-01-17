@@ -22,7 +22,10 @@ class Table
         return isset($this->fields[$identifier]);
     }
 
-    public function addField(Field $field, string $identifier): static
+    /**
+     * @return $this
+     */
+    public function addField(Field $field, string $identifier)
     {
         if($this->hasField($identifier)) {
             $this->replaceField($field, $identifier);
@@ -33,14 +36,20 @@ class Table
         return $this;
     }
 
-    public function replaceField(Field $field, string $identifier): static
+    /**
+     * @return $this
+     */
+    public function replaceField(Field $field, string $identifier)
     {
         $this->fields[$identifier] = $field;
 
         return $this;
     }
 
-    public function removeField(string $identifier): static
+    /**
+     * @return $this
+     */
+    public function removeField(string $identifier)
     {
         if (null !== $this->fields[$identifier] ?? null) {
             unset($this->fields[$identifier]);
@@ -59,14 +68,20 @@ class Table
         return $this->fields;
     }
 
-    public function clearFields(): static
+    /**
+     * @return $this
+     */
+    public function clearFields()
     {
         $this->fields = [];
 
         return $this;
     }
 
-    public function mergeWithOverrideTable(Table $toAppendWithPrio): static
+    /**
+     * @return $this
+     */
+    public function mergeWithOverrideTable(Table $toAppendWithPrio)
     {
         foreach($toAppendWithPrio->getFields() as $fieldIdentifier => $field) {
             $this->addField($field, $fieldIdentifier);

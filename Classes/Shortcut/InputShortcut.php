@@ -10,6 +10,8 @@ use Febis\SimpleTca\Data\Field;
  */
 class InputShortcut extends AbstractShortcut
 {
+    protected ?string $eval = null;
+    protected ?string $renderType = null;
     protected static function getType(): string
     {
         return "input";
@@ -37,9 +39,11 @@ class InputShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $label = null,
-        protected ?string $eval = null,
-        protected ?string $renderType = null
+        ?string $eval = null,
+        ?string $renderType = null
     ) {
+        $this->eval = $eval;
+        $this->renderType = $renderType;
         parent::__construct($label);
     }
 }

@@ -6,14 +6,24 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 class Columns implements ComponentInterface
 {
+    private string $table;
+    private string $l10n;
+    private bool $activateLanguage;
+    private bool $activateEnableColumns;
+
     protected array $columns = [];
 
     public function __construct(
-        private readonly string $table,
-        private readonly string $l10n,
-        private readonly bool $activateLanguage,
-        private readonly bool $activateEnableColumns
+        string $table,
+        string $l10n,
+        bool $activateLanguage,
+        bool $activateEnableColumns
     ) {
+        $this->table = $table;
+        $this->l10n = $l10n;
+        $this->activateLanguage = $activateLanguage;
+        $this->activateEnableColumns = $activateEnableColumns;
+
         $this->addBaseColumns();
         $this->addDefaultColumns();
     }

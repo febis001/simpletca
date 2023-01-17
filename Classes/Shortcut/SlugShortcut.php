@@ -10,6 +10,8 @@ use Febis\SimpleTca\Data\Field;
  */
 class SlugShortcut extends AbstractShortcut
 {
+    protected ?string $size = null;
+    protected ?string $eval = null;
     protected static function getType(): string
     {
         return "slug";
@@ -49,9 +51,11 @@ class SlugShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $label = null,
-        protected ?string $size = null,
-        protected ?string $eval = null
+        ?string $size = null,
+        ?string $eval = null
     ) {
+        $this->size = $size;
+        $this->eval = $eval;
         parent::__construct($label);
     }
 }

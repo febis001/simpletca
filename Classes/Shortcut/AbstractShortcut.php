@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  */
 abstract class AbstractShortcut implements TcaShortcutInterface
 {
+    protected ?string $identifier = null;
     abstract protected static function getType(): string;
 
     /** String[] */
@@ -28,19 +29,25 @@ abstract class AbstractShortcut implements TcaShortcutInterface
 
     protected array $unsetAttributes = [];
 
-    public function __construct(
-        protected ?string $identifier = null
-    ) {
+    public function __construct(?string $identifier = null)
+    {
+        $this->identifier = $identifier;
     }
 
-    public function withIdentifier(?string $identifier): static
+    /**
+     * @return $this
+     */
+    public function withIdentifier(?string $identifier)
     {
         $this->identifier = $identifier;
 
         return $this;
     }
 
-    public function withArguments(?array $args): static
+    /**
+     * @return $this
+     */
+    public function withArguments(?array $args)
     {
         foreach ($args as $argName => $arg) {
             if (property_exists(static::class, $argName)) {
@@ -51,7 +58,10 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         return $this;
     }
 
-    public function withAdditionalAttributes(?array $additionalAttributes = null): static
+    /**
+     * @return $this
+     */
+    public function withAdditionalAttributes(?array $additionalAttributes = null)
     {
         $this->additionalAttributes = $additionalAttributes;
 
@@ -135,7 +145,10 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         return $config;
     }
 
-    public function __call(string $name, array $arguments): static
+    /**
+     * @return $this
+     */
+    public function __call(string $name, array $arguments)
     {
         /** match 'with...'-Calls like withEval or withSize, but not for withType */
         preg_match('/\Awith([A-Z][A-z0-9]+)\z/', $name, $match);
@@ -178,7 +191,11 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         );
     }
 
-    protected static function toLowerCamelCase(array|string $str): array|string
+    /**
+     * @param mixed[]|string $str
+     * @return mixed[]|string
+     */
+    protected static function toLowerCamelCase($str)
     {
         $separators = ' _-';
         $separatorsRegex = '\s\-_';

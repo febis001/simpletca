@@ -10,6 +10,15 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class FceGenerator
 {
+    protected string $identifier = '';
+    protected string $cTypeLabel = '';
+    protected string $icon = '';
+    protected array $palettes = [];
+    protected array $columns = [];
+    protected string $showItem = '';
+    protected Mode $showitemMode = Mode::Default;
+    protected array $columnsOverrides = [];
+
     protected final const CONTENT_TABLE = 'tt_content';
     protected final const FIELDS = [
         'rowDescription' => 'rowDescription,',
@@ -43,14 +52,14 @@ class FceGenerator
     ];
 
     public function __construct(
-        protected string $identifier = '',
-        protected string $cTypeLabel = '',
-        protected string $icon = '',
-        protected array $palettes = [],
-        protected array $columns = [],
-        protected string $showItem = '',
-        protected Mode $showitemMode = Mode::Default,
-        protected array $columnsOverrides = []
+        string $identifier = '',
+        string $cTypeLabel = '',
+        string $icon = '',
+        array $palettes = [],
+        array $columns = [],
+        string $showItem = '',
+        Mode $showitemMode = Mode::Default,
+        array $columnsOverrides = []
     ) {
     }
 

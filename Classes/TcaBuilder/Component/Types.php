@@ -8,11 +8,15 @@ class Types implements ComponentInterface
 {
     public string $defaultTypeFields = '';
     protected array $additionalTypes = [];
+    private bool $activateLanguage;
+    private bool $activateEnableColumns;
 
     public function __construct(
-        private readonly bool $activateLanguage,
-        private readonly bool $activateEnableColumns
+        bool $activateLanguage,
+        bool $activateEnableColumns
     ) {
+        $this->activateLanguage = $activateLanguage;
+        $this->activateEnableColumns = $activateEnableColumns;
     }
 
     public function addAdditionalType(array $type)

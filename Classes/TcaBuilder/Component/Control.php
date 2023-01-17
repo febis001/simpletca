@@ -10,13 +10,17 @@ class Control implements ComponentInterface
     public bool $adminOnly = false;
     public string $icon = '';
     public string $searchFields = 'title';
+    protected string $title;
+    public bool $activateLanguage;
+    public bool $activateSorting;
+    public bool $activateEnableColumns;
 
-    public function __construct(
-        protected string $title,
-        public bool $activateLanguage,
-        public bool $activateSorting,
-        public bool $activateEnableColumns
-    ) {
+    public function __construct(string $title, bool $activateLanguage, bool $activateSorting, bool $activateEnableColumns)
+    {
+        $this->title = $title;
+        $this->activateLanguage = $activateLanguage;
+        $this->activateSorting = $activateSorting;
+        $this->activateEnableColumns = $activateEnableColumns;
     }
 
     public function getArray(): array

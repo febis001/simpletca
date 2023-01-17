@@ -47,9 +47,11 @@ class TcaBuilder
     public Columns $columns;
     public Palettes $palettes;
     public Types $types;
+    protected string $table;
 
-    public function __construct(protected string $table, string $extKey)
+    public function __construct(string $table, string $extKey)
     {
+        $this->table = $table;
         $this->l10n = 'LLL:EXT:' . $extKey . '/Resources/Private/Language/locallang_db.xlf:';
         $this->l10nExt = $this->l10n . $table;
         $this->l10nGeneral = $this->l10n . 'general';

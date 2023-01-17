@@ -13,6 +13,9 @@ use Febis\SimpleTca\TcaGenerator;
  */
 class IRREShortcut extends AbstractShortcut
 {
+    protected ?string $foreignTable = null;
+    protected ?int $minitems = null;
+    protected ?int $maxitems = null;
     protected static function getType(): string
     {
         return "inline";
@@ -57,14 +60,20 @@ class IRREShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $label = null,
-        protected ?string $foreignTable = null,
-        protected ?int $minitems = null,
-        protected ?int $maxitems = null
+        ?string $foreignTable = null,
+        ?int $minitems = null,
+        ?int $maxitems = null
     ) {
+        $this->foreignTable = $foreignTable;
+        $this->minitems = $minitems;
+        $this->maxitems = $maxitems;
         parent::__construct($label);
     }
 
-    public function withItemsRange(int $minitems = null, int $maxitems = null): static
+    /**
+     * @return $this
+     */
+    public function withItemsRange(int $minitems = null, int $maxitems = null)
     {
         $this->unsetAttributes['minitems'] = null === $minitems;
         $this->unsetAttributes['maxitems'] = null === $maxitems;

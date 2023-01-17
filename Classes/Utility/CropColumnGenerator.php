@@ -15,7 +15,10 @@ class CropColumnGenerator
         ]
     ];
 
-    public function forAllCropVariants(): static
+    /**
+     * @return $this
+     */
+    public function forAllCropVariants()
     {
         $this->cropVariants = static::getCropVariants();
         return $this;
@@ -26,7 +29,7 @@ class CropColumnGenerator
      * @param string[] $cropVariants
      * @return $this
      */
-    public function forCropVariants(...$cropVariants): static
+    public function forCropVariants(...$cropVariants)
     {
         $this->cropVariants = $cropVariants;
         return $this;
@@ -37,7 +40,7 @@ class CropColumnGenerator
      * @param string[] $disabledRatios
      * @return CropColumnGenerator
      */
-    public function disableAspectRatios(...$disabledRatios): static
+    public function disableAspectRatios(...$disabledRatios)
     {
         $cropVariants = &$this->cropConfig['config']['cropVariants'];
 
@@ -55,7 +58,7 @@ class CropColumnGenerator
      * @param string[] $enabledRatios
      * @return CropColumnGenerator
      */
-    public function enableAspectRatios(...$enabledRatios): static
+    public function enableAspectRatios(...$enabledRatios)
     {
         $disabledRatios = array_diff(static::getAvailableRatios(), $enabledRatios);
         return $this->disableAspectRatios(...$disabledRatios);

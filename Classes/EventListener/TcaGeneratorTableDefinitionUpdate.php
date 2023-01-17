@@ -15,11 +15,10 @@ class TcaGeneratorTableDefinitionUpdate
 {
     public function __invoke(AlterTableDefinitionStatementsEvent $event)
     {
+        $item0Unpacked = $event->getSqlData();
+        $item1Unpacked = TcaGenerator::getTcaDefinitionDataInstance()->getSqlArray();
         $event->setSqlData(
-            [
-                ...$event->getSqlData(),
-                ...TcaGenerator::getTcaDefinitionDataInstance()->getSqlArray()
-            ]
+            array_merge($item0Unpacked, $item1Unpacked)
         );
     }
 }

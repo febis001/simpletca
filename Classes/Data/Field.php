@@ -4,9 +4,11 @@ namespace Febis\SimpleTca\Data;
 
 class Field
 {
-    public function __construct(
-        public $type,
-        public $default = null
-    )
-    {}
+    public $type;
+    public $default = null;
+    public function __construct($type, $default = null)
+    {
+        $this->type = $type;
+        $this->default = $default;
+    }
 }

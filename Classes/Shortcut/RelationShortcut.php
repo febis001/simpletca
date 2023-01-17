@@ -14,6 +14,10 @@ use Febis\SimpleTca\TcaGenerator;
  */
 class RelationShortcut extends AbstractShortcut
 {
+    protected ?string $allowed = null;
+    protected ?int $size = null;
+    protected ?int $minitems = null;
+    protected ?int $maxitems = null;
     protected static function getType(): string
     {
         return "group";
@@ -52,15 +56,22 @@ class RelationShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $label = null,
-        protected ?string $allowed = null,
-        protected ?int $size = null,
-        protected ?int $minitems = null,
-        protected ?int $maxitems = null
+        ?string $allowed = null,
+        ?int $size = null,
+        ?int $minitems = null,
+        ?int $maxitems = null
     ) {
+        $this->allowed = $allowed;
+        $this->size = $size;
+        $this->minitems = $minitems;
+        $this->maxitems = $maxitems;
         parent::__construct($label);
     }
 
-    public function withItemsRange(int $minitems = null, int $maxitems = null): static
+    /**
+     * @return $this
+     */
+    public function withItemsRange(int $minitems = null, int $maxitems = null)
     {
         $this->unsetAttributes['minitems'] = null === $minitems;
         $this->unsetAttributes['maxitems'] = null === $maxitems;

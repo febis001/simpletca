@@ -6,12 +6,16 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 class Palettes implements ComponentInterface
 {
+    private bool $activateLanguage;
+    private bool $activateEnableColumns;
     protected array $palettes = [];
 
     public function __construct(
-        private readonly bool $activateLanguage,
-        private readonly bool $activateEnableColumns
+        bool $activateLanguage,
+        bool $activateEnableColumns
     ) {
+        $this->activateLanguage = $activateLanguage;
+        $this->activateEnableColumns = $activateEnableColumns;
         $this->addBasePalettes();
     }
 

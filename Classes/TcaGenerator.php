@@ -123,7 +123,7 @@ class TcaGenerator
                     /** @var TcaShortcutInterface $shortcutInstance */
                     return $shortcutInstance;
                 }
-            } catch (\ReflectionException) {
+            } catch (\ReflectionException $exception) {
                 throw new ShortcutNotAllowedException(
                     'Shortcut "' . $fqcn . '" was not found or does not implement "' .
                     TcaShortcutInterface::class . '".',

@@ -9,5 +9,8 @@ interface TcaShortcutInterface
 {
     public function build(?string $label = null): array;
 
-    public function withArguments(array $args): static;
+    /**
+     * @return $this
+     */
+    public function withArguments(array $args);
 }

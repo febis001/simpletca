@@ -16,6 +16,12 @@ use Febis\SimpleTca\TcaGenerator;
  */
 class RelationMMShortcut extends AbstractShortcut
 {
+    protected ?string $allowed = null;
+    protected ?string $mM = null;
+    protected ?string $mMOppositeField = null;
+    protected ?int $size = null;
+    protected ?int $minitems = null;
+    protected ?int $maxitems = null;
     protected static function getType(): string
     {
         return "group";
@@ -54,13 +60,19 @@ class RelationMMShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $label = null,
-        protected ?string $allowed = null,
-        protected ?string $mM = null,
-        protected ?string $mMOppositeField = null,
-        protected ?int $size = null,
-        protected ?int $minitems = null,
-        protected ?int $maxitems = null
+        ?string $allowed = null,
+        ?string $mM = null,
+        ?string $mMOppositeField = null,
+        ?int $size = null,
+        ?int $minitems = null,
+        ?int $maxitems = null
     ) {
+        $this->allowed = $allowed;
+        $this->mM = $mM;
+        $this->mMOppositeField = $mMOppositeField;
+        $this->size = $size;
+        $this->minitems = $minitems;
+        $this->maxitems = $maxitems;
         parent::__construct($label);
     }
 
@@ -72,7 +84,10 @@ class RelationMMShortcut extends AbstractShortcut
         return $config;
     }
 
-    public function withItemsRange(int $minitems = null, int $maxitems = null): static
+    /**
+     * @return $this
+     */
+    public function withItemsRange(int $minitems = null, int $maxitems = null)
     {
         $this->unsetAttributes['minitems'] = null === $minitems;
         $this->unsetAttributes['maxitems'] = null === $maxitems;
