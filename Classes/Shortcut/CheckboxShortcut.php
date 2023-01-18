@@ -41,7 +41,11 @@ class CheckboxShortcut extends AbstractShortcut
         parent::__construct($label);
     }
 
-    public function asToggle(): static {
+    /**
+     * @return $this
+     */
+    public function asToggle()
+    {
         $this->renderType = 'checkboxToggle';
         return $this;
     }
