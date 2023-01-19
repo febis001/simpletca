@@ -10,6 +10,7 @@ use Febis\SimpleTca\Data\TcaDefinitionData;
 use Febis\SimpleTca\Exception\MethodNotDefinedException;
 use Febis\SimpleTca\Exception\ShortcutNotAllowedException;
 use Febis\SimpleTca\Exception\TableNotParsedException;
+use Febis\SimpleTca\Shortcut\AssetShortcut;
 use Febis\SimpleTca\Shortcut\ImageShortcut;
 use Febis\SimpleTca\Shortcut\InputShortcut;
 use Febis\SimpleTca\Shortcut\IRREShortcut;
@@ -23,6 +24,7 @@ use Febis\SimpleTca\FceGenerator\Showitem\Mode;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
+ * @method static AssetShortcut createAsset($label = null, $minitems = null, $maxitems = null, $fieldname = null)
  * @method static CheckboxShortcut createCheckbox($label = null, $renderType = null)
  * @method static ImageShortcut createImage($label = null, $minitems = null, $maxitems = null, $fieldname = null)
  * @method static IRREShortcut createIRRE($label = null, $foreignTable = null, $minitems = null, $maxitems = null)
