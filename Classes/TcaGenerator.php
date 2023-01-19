@@ -5,6 +5,7 @@ namespace Febis\SimpleTca;
 use Febis\SimpleTca\Data\Config;
 use Febis\SimpleTca\FceGenerator\FceGenerator;
 use Febis\SimpleTca\Shortcut\CheckboxShortcut;
+use Febis\SimpleTca\Shortcut\PassthroughShortcut;
 use Febis\SimpleTca\TcaBuilder\TcaBuilder;
 use Febis\SimpleTca\Data\TcaDefinitionData;
 use Febis\SimpleTca\Exception\MethodNotDefinedException;
@@ -29,6 +30,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @method static ImageShortcut createImage($label = null, $minitems = null, $maxitems = null, $fieldname = null)
  * @method static IRREShortcut createIRRE($label = null, $foreignTable = null, $minitems = null, $maxitems = null)
  * @method static InputShortcut createInput($label = null, $eval = null, $renderType = null)
+ * @method static PassthroughShortcut createPassthrough($label = null)
  * @method static RelationShortcut createRelation($label = null, $allowed = null, $size = null, $minitems = null, $maxitems = null)
  * @method static RelationMMShortcut createRelationMM($label = null, $allowed = null, $mM = null, $mMOppositeField = null, $size = null, $minitems = null, $maxitems = null)
  * @method static RteShortcut createRte($label = null)

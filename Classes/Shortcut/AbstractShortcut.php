@@ -15,6 +15,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 abstract class AbstractShortcut implements TcaShortcutInterface
 {
     protected ?string $identifier = null;
+    protected ?Field $overrideField = null;
     abstract protected static function getType(): string;
 
     /** String[] */
@@ -65,6 +66,16 @@ abstract class AbstractShortcut implements TcaShortcutInterface
     {
         $this->additionalAttributes = $additionalAttributes;
 
+        return $this;
+    }
+
+    /**
+     * @param Field|null $overrideField
+     * @return $this
+     */
+    public function overrideSqlDefinition(?Field $overrideField)
+    {
+        $this->overrideField = $overrideField;
         return $this;
     }
 
@@ -185,7 +196,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface
         $identifierNoTable = array_pop($identifierNoTable);
         TcaGenerator::getTcaDefinitionDataInstance()->addTable(
             new Table([
-                $identifierNoTable => static::getSqlDefinition()
+                $identifierNoTable => $this->overrideField ?? static::getSqlDefinition()
             ]),
             TcaGenerator::getTablename()
         );
