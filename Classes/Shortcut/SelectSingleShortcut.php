@@ -6,6 +6,7 @@ use Febis\SimpleTca\Data\Field;
 
 /**
  * @method self withItems($items = null)
+ * @method self withRenderType($renderType = null)
  */
 class SelectSingleShortcut extends AbstractShortcut
 {
@@ -18,7 +19,7 @@ class SelectSingleShortcut extends AbstractShortcut
 
     protected static function getAllowedProperties(): array
     {
-        return ['items'];
+        return ['items', 'renderType'];
     }
 
     protected static function getDefaultProperties(): array
