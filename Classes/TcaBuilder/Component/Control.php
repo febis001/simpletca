@@ -6,6 +6,7 @@ class Control implements ComponentInterface
 {
     public string $label = 'title';
     public bool $hideTable = false;
+    public bool $ignorePageTypeRestriction = false;
     public bool $readOnly = false;
     public bool $adminOnly = false;
     public string $icon = '';
@@ -38,6 +39,9 @@ class Control implements ComponentInterface
                 'hideTable' => $this->hideTable,
                 'readOnly' => $this->readOnly,
                 'adminOnly' => $this->adminOnly,
+                'security' => [
+                    'ignorePageTypeRestriction' => $this->ignorePageTypeRestriction
+                ],
                 'enablecolumns' => [
                     'disabled' => 'hidden',
                     'starttime' => 'starttime',
