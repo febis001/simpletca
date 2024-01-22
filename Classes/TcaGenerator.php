@@ -26,6 +26,7 @@ use Febis\SimpleTca\FceGenerator\Showitem\Mode;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
+ * @method static FileShortcut createFile($label = null, $minitems = null, $maxitems = null, $allowedFileExtensions = null)
  * @method static AssetShortcut createAsset($label = null, $minitems = null, $maxitems = null, $fieldname = null)
  * @method static CheckboxShortcut createCheckbox($label = null, $renderType = null)
  * @method static ImageShortcut createImage($label = null, $minitems = null, $maxitems = null, $fieldname = null)
