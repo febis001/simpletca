@@ -14,6 +14,7 @@ use Febis\SimpleTca\Exception\MethodNotDefinedException;
 use Febis\SimpleTca\Exception\ShortcutNotAllowedException;
 use Febis\SimpleTca\Exception\TableNotParsedException;
 use Febis\SimpleTca\Shortcut\ImageShortcut;
+use Febis\SimpleTca\Shortcut\FileShortcut;
 use Febis\SimpleTca\Shortcut\InputShortcut;
 use Febis\SimpleTca\Shortcut\IRREShortcut;
 use Febis\SimpleTca\Shortcut\RelationMMShortcut;

@@ -2,6 +2,9 @@
 
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 class Control implements ComponentInterface
 {
     public string $label = 'title';
@@ -22,6 +25,7 @@ class Control implements ComponentInterface
 
     public function getArray(): array
     {
+        $versionInformation = GeneralUtility::makeInstance(Typo3Version::class);
         $ctrl = [
             'ctrl' => [
                 'title' => $this->title,
@@ -39,9 +43,6 @@ class Control implements ComponentInterface
                 'hideTable' => $this->hideTable,
                 'readOnly' => $this->readOnly,
                 'adminOnly' => $this->adminOnly,
-                'security' => [
-                    'ignorePageTypeRestriction' => $this->ignorePageTypeRestriction
-                ],
                 'enablecolumns' => [
                     'disabled' => 'hidden',
                     'starttime' => 'starttime',
@@ -53,6 +54,16 @@ class Control implements ComponentInterface
                 'searchFields' => $this->searchFields,
             ],
         ];
+        if ($versionInformation->getMajorVersion() >= 12) {
+            $securityCtrl = [
+                'security' => [
+                    'ignorePageTypeRestriction' => $this->ignorePageTypeRestriction
+                ],
+            ];
+
+            $ctrl = array_merge($ctrl['ctrl'], $securityCtrl);
+        }
+
         $this->removeDisabledConfiguration($ctrl);
 
         return $ctrl;
