@@ -2,23 +2,25 @@
 
 namespace Febis\SimpleTca;
 
-use Febis\SimpleTca\Data\Config;
+use Febis\SimpleTca\Configuration\SimpleTcaConfig;
 use Febis\SimpleTca\Exception\CallstackExtractionException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 trait ConfigTrait
 {
-    protected static ?Config $config = null;
+    protected static ?SimpleTcaConfig $config = null;
 
     /**
      * @throws CallstackExtractionException
      */
-    public static function getConfig(): Config
+    public static function getConfig(): SimpleTcaConfig
     {
-        if (!static::$config instanceof Config) {
-            static::$config = GeneralUtility::makeInstance(Config::class);
+        if (!static::$config instanceof SimpleTcaConfig) {
+            static::$config = GeneralUtility::makeInstance(SimpleTcaConfig::class);
         }
 
-        return static::$config->switchFileConfig();
+        static::$config->determineAndSetConfig();
+
+        return static::$config;
     }
 }

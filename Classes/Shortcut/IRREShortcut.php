@@ -5,13 +5,14 @@ namespace Febis\SimpleTca\Shortcut;
 use Febis\SimpleTca\Data\Field;
 use Febis\SimpleTca\Data\Table;
 use Febis\SimpleTca\TcaGenerator;
+use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
 
 /**
  * @method self withForeignTable($foreignTable = null)
  * @method self withMinitems($minitems = null)
  * @method self withMaxitems($maxitems = null)
  */
-class IRREShortcut extends AbstractShortcut
+class IRREShortcut extends AbstractShortcut implements DataProcessorInterface
 {
     protected static function getType(): string
     {
@@ -53,6 +54,24 @@ class IRREShortcut extends AbstractShortcut
             ]),
             $this->foreignTable
         );
+    }
+
+    public function getDataProcessorType(): string
+    {
+        return DatabaseQueryProcessor::class;
+    }
+
+    public function getDataProcessorConfig(string $fieldName): array
+    {
+        return [
+            'table' => $this->foreignTable,
+            'where.data' => 'field:uid',
+            'where.wrap' => 'parent=|',
+            'pidInList.field' => 'pid',
+            'orderBy' => 'sorting',
+
+            'as' => $fieldName
+        ];
     }
 
     public function __construct(

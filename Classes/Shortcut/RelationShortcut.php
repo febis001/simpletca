@@ -5,6 +5,7 @@ namespace Febis\SimpleTca\Shortcut;
 use Febis\SimpleTca\Data\Field;
 use Febis\SimpleTca\Data\Table;
 use Febis\SimpleTca\TcaGenerator;
+use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
 
 /**
  * @method self withAllowed($allowed = null)
@@ -12,7 +13,7 @@ use Febis\SimpleTca\TcaGenerator;
  * @method self withMaxitems($maxitems = null)
  * @method self withSize($size = null)
  */
-class RelationShortcut extends AbstractShortcut
+class RelationShortcut extends AbstractShortcut implements DataProcessorInterface
 {
     protected static function getType(): string
     {
@@ -48,6 +49,24 @@ class RelationShortcut extends AbstractShortcut
             ]),
             $this->allowed,
         );
+    }
+
+    public function getDataProcessorType(): string
+    {
+        return DatabaseQueryProcessor::class;
+    }
+
+    public function getDataProcessorConfig(string $fieldName): array
+    {
+        return [
+            'table' => $this->allowed,
+            'where.data' => 'field:uid',
+            'where.wrap' => 'parent=|',
+            'pidInList.field' => 'pid',
+            'orderBy' => 'sorting',
+
+            'as' => $fieldName
+        ];
     }
 
     public function __construct(

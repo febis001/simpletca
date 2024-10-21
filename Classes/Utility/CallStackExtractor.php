@@ -19,10 +19,7 @@ class CallStackExtractor implements SingletonInterface
      */
     public function extractExtkeyAndTablename(): array
     {
-        [$extkey, $filename] = $this->filterExtkeyAndFilename();
-
-        $realTablename = $this->getRealTablename($filename);
-
+        [$extkey, $_, $realTablename] = $this->extractAll();
         return [$extkey, $realTablename];
     }
 
@@ -32,6 +29,17 @@ class CallStackExtractor implements SingletonInterface
     public function extractExtkeyAndFilename(): array
     {
         return $this->filterExtkeyAndFilename();
+    }
+
+    /**
+     * @throws CallstackExtractionException
+     */
+    public function extractAll(): array
+    {
+        [$extkey, $filename] = $this->filterExtkeyAndFilename();
+        $realTablename = $this->getRealTablename($filename);
+
+        return [$extkey, $filename, $realTablename];
     }
 
     /**
@@ -70,7 +78,6 @@ class CallStackExtractor implements SingletonInterface
     }
 
     /**
-     * @throws Exception
      * @throws \Doctrine\DBAL\Exception
      */
     protected function getTableList(): array
