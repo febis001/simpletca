@@ -18,7 +18,6 @@ class Columns implements ComponentInterface
         private readonly bool $activateEnableColumns,
     ) {
         $this->addBaseColumns();
-        $this->addDefaultColumns();
     }
 
     /**
@@ -203,6 +202,8 @@ class Columns implements ComponentInterface
 
     public function getArray(): array
     {
+        $this->addDefaultColumns();
+
         $this->completeLabelPaths();
         return ['columns' => $this->columns];
     }

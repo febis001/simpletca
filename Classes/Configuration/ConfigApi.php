@@ -85,8 +85,8 @@ trait ConfigApi
     {
         try {
             $this->set('tablenameOverride', $tablename);
-        } catch (InvalidConfigException $_) {
-            // Never occurs at this time, because default Level is used
+        } catch (InvalidConfigException $e) {
+            // Should never occur at this time, because default Level is used
         }
     }
 

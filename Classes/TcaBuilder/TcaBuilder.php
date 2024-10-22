@@ -38,12 +38,6 @@ use Febis\SimpleTca\TcaGenerator;
  */
 class TcaBuilder
 {
-    public bool $activateLanguage = true;
-
-    public bool $activateSorting = true;
-
-    public bool $activateEnableColumns = true;
-
     public Control $ctrl;
 
     public Columns $columns;
@@ -52,8 +46,12 @@ class TcaBuilder
 
     public Types $types;
 
-    public function __construct(protected string $table)
-    {
+    public function __construct(
+        protected string $table,
+        protected bool $activateLanguage = true,
+        protected bool $activateSorting = true,
+        protected bool $activateEnableColumns = true,
+    ) {
         $this->ctrl = new Control(
             TcaGenerator::translate('title'),
             $this->activateLanguage,

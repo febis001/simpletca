@@ -14,7 +14,7 @@ stages:
     - release
 
 .php:
-    image: thecodingmachine/php:8.2-v4-cli
+    image: thecodingmachine/php:8.3-v4-cli
     cache:
         key: php
         policy: pull

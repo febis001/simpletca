@@ -16,10 +16,11 @@ class CallStackExtractor implements SingletonInterface
 
     /**
      * @throws CallstackExtractionException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariables)
      */
     public function extractExtkeyAndTablename(): array
     {
-        [$extkey, $_, $realTablename] = $this->extractAll();
+        [$extkey, $filename, $realTablename] = $this->extractAll();
         return [$extkey, $realTablename];
     }
 

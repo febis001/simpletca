@@ -13,7 +13,7 @@ use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
  * @method self withMaxitems($maxitems = null)
  * @method self withSize($size = null)
  */
-class RelationShortcut extends AbstractShortcut implements DataProcessorInterface
+class RelationShortcut extends AbstractShortcut implements RecursiveDataProcessorInterface
 {
     protected static function getType(): string
     {
@@ -67,6 +67,11 @@ class RelationShortcut extends AbstractShortcut implements DataProcessorInterfac
 
             'as' => $fieldName
         ];
+    }
+
+    public function getTcaTable(): string
+    {
+        return $this->allowed;
     }
 
     public function __construct(

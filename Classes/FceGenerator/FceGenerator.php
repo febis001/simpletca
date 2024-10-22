@@ -4,7 +4,6 @@ namespace Febis\SimpleTca\FceGenerator;
 
 use Febis\SimpleTca\Data\TsConfig\FceGroup;
 use Febis\SimpleTca\Data\TsConfig\FceItem as TsConfigItem;
-use Febis\SimpleTca\Data\Typoscript\DataProcessorItem;
 use Febis\SimpleTca\Data\Typoscript\FceItem as TyposcriptItem;
 use Febis\SimpleTca\Exception\CacheInstanceException;
 use Febis\SimpleTca\Exception\InvalidKeyException;
@@ -13,9 +12,8 @@ use Febis\SimpleTca\Exception\TsConfigExistsException;
 use Febis\SimpleTca\Exception\TyposcriptExistsException;
 use Febis\SimpleTca\FceGenerator\Showitem\Mode;
 use Febis\SimpleTca\Shortcut\AbstractShortcut;
-use Febis\SimpleTca\Shortcut\DataProcessorInterface;
 use Febis\SimpleTca\TcaGenerator;
-use Febis\SimpleTca\Utility\TypoScriptHelper;
+use Febis\SimpleTca\Utility\DataProcessorUtility;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
@@ -312,19 +310,7 @@ class FceGenerator
 
     protected function generateDataProcessors(): array
     {
-        $dataProcessors = [];
-        foreach ($this->columns as $fieldName => $column) {
-            if (false === $column instanceof DataProcessorInterface) {
-                continue;
-            }
-
-            $dataProcessors[] = new DataProcessorItem(
-                $column->getDataProcessorType(),
-                TypoScriptHelper::transformFromTypedTyposcript($column->getDataProcessorConfig($fieldName)),
-            );
-        }
-
-        return $dataProcessors;
+        return DataProcessorUtility::generate($this->columns);
     }
 
     /**

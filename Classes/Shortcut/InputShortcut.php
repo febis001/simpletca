@@ -7,6 +7,7 @@ use Febis\SimpleTca\Data\Field;
 /**
  * @method self withEval($eval = null)
  * @method self withRenderType($renderType = null)
+ * @method self withRequired(bool $required = false)
  */
 class InputShortcut extends AbstractShortcut
 {
@@ -17,7 +18,7 @@ class InputShortcut extends AbstractShortcut
 
     protected static function getAllowedProperties(): array
     {
-        return ['eval', 'renderType'];
+        return ['eval', 'renderType', 'required'];
     }
 
     protected static function getDefaultProperties(): array
@@ -39,6 +40,7 @@ class InputShortcut extends AbstractShortcut
         ?string $identifier = null,
         protected ?string $eval = null,
         protected ?string $renderType = null,
+        protected ?bool $required = null,
     ) {
         parent::__construct($identifier);
     }

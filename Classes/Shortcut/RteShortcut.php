@@ -5,6 +5,7 @@ namespace Febis\SimpleTca\Shortcut;
 use Febis\SimpleTca\Data\Field;
 
 /**
+ * @method self withRequired(bool $required = false)
  */
 class RteShortcut extends AbstractShortcut
 {
@@ -15,7 +16,7 @@ class RteShortcut extends AbstractShortcut
 
     protected static function getAllowedProperties(): array
     {
-        return [];
+        return ['required'];
     }
 
     protected static function getDefaultProperties(): array
@@ -35,6 +36,7 @@ class RteShortcut extends AbstractShortcut
 
     public function __construct(
         ?string $identifier = null,
+        protected ?bool $required = null,
     ) {
         parent::__construct($identifier);
     }

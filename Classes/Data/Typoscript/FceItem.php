@@ -28,26 +28,41 @@ class FceItem
         $tsObjectName = sprintf('tt_content.%s', $this->identifier);
 
         $tsObject = [
-            ['templateName', $this->templateName]
+            ['templateName', $this->templateName],
         ];
 
-        if ($this->dataProcessors !== []) {
-            $counter = 0;
-            $dataProcessors = [];
-            foreach ($this->dataProcessors as $dataProcessor) {
-                $counter += TypoScriptHelper::TYPOSCRIPT_COUNTING;
-                $dataProcessors[] = [$counter, $dataProcessor->getProcessorClass()];
-                $dataProcessors[] = [$counter, $dataProcessor->getConfig()];
-            }
-
-            $tsObject[] = ['dataProcessing', $dataProcessors];
-        }
+        $this->generateAndAppendDataProcessors($this->dataProcessors, $tsObject);
 
         $typoscript = [];
         $typoscript[] = sprintf("%s =< %s", $tsObjectName, $this->baseElement);
         $typoscript[] = TypoScriptHelper::objectToTextualRepresentation($tsObjectName, $tsObject);
 
         return implode("\n", $typoscript);
+    }
+
+    /**
+     * @param DataProcessorItem[] $dataProcessorItems
+     */
+    protected function generateAndAppendDataProcessors(array $dataProcessorItems, array &$tsObject): void
+    {
+        if ($dataProcessorItems !== []) {
+            $counter = 0;
+            $dataProcessors = [];
+            foreach ($dataProcessorItems as $dataProcessor) {
+                $counter += TypoScriptHelper::TYPOSCRIPT_COUNTING;
+                $dataProcessors[] = [$counter, $dataProcessor->getProcessorClass()];
+
+                $subTsObject = $dataProcessor->getConfig();
+
+                if ($dataProcessor->getSubDataProcessors() !== []) {
+                    $this->generateAndAppendDataProcessors($dataProcessor->getSubDataProcessors(), $subTsObject);
+                }
+
+                $dataProcessors[] = [$counter, $subTsObject];
+            }
+
+            $tsObject[] = ['dataProcessing', $dataProcessors];
+        }
     }
 
     public static function __set_state(array $data)

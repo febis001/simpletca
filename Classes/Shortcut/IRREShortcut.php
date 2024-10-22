@@ -12,7 +12,7 @@ use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
  * @method self withMinitems($minitems = null)
  * @method self withMaxitems($maxitems = null)
  */
-class IRREShortcut extends AbstractShortcut implements DataProcessorInterface
+class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInterface
 {
     protected static function getType(): string
     {
@@ -72,6 +72,11 @@ class IRREShortcut extends AbstractShortcut implements DataProcessorInterface
 
             'as' => $fieldName
         ];
+    }
+
+    public function getTcaTable(): string
+    {
+        return $this->foreignTable;
     }
 
     public function __construct(
