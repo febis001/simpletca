@@ -2,6 +2,7 @@
 
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
+use Febis\SimpleTca\Exception\InvalidKeyException;
 use Febis\SimpleTca\Shortcut\AbstractShortcut;
 use Febis\SimpleTca\TcaGenerator;
 
@@ -20,18 +21,32 @@ class Columns implements ComponentInterface
         $this->addDefaultColumns();
     }
 
-    public function addColumn(AbstractShortcut $column): void
+    /**
+     * @throws InvalidKeyException
+     */
+    public function addColumn(AbstractShortcut | array $column, string | int $key = null): void
     {
-        $this->columns[$column->getIdentifier()] = $column;
+        if (false === is_string($key)) {
+            if ($column instanceof AbstractShortcut) {
+                $key = $column->getIdentifier();
+            } elseif (isset($column['_identifier'])) {
+                $key = $column['_identifier'];
+            } else {
+                throw new InvalidKeyException('Missing key for TCA column', 1724323278);
+            }
+        }
+
+        $this->columns[$key] = $column;
     }
 
     /**
-     * @param list<AbstractShortcut> $columns
+     * @throws InvalidKeyException
+     * @param list<AbstractShortcut|array> $columns
      */
     public function addColumns(array $columns): void
     {
-        foreach ($columns as $column) {
-            $this->addColumn($column);
+        foreach ($columns as $key => $column) {
+            $this->addColumn($column, $key);
         }
     }
 
