@@ -9,16 +9,19 @@ use Febis\SimpleTca\Data\Field;
  */
 class RteShortcut extends AbstractShortcut
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "text";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['required'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
@@ -26,6 +29,7 @@ class RteShortcut extends AbstractShortcut
         ];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(

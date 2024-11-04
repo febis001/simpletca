@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Php80\Rector\Switch_\ChangeSwitchToMatchRector;
 use Rector\PostRector\Rector\NameImportingPostRector;
 use Ssch\TYPO3Rector\CodeQuality\General\ConvertImplicitVariablesToExplicitGlobalsRector;
 use Ssch\TYPO3Rector\CodeQuality\General\ExtEmConfRector;
@@ -31,6 +32,9 @@ return RectorConfig::configure()
                 'ext_tables.php',
                 'ClassAliasMap.php',
             ],
+            ChangeSwitchToMatchRector::class => [
+                'Classes/Configuration/ConfigApi.php'
+            ]
         ],
     )
     ->withRules(

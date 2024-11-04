@@ -19,11 +19,13 @@ class TsConfigDataHandling extends AbstractDataHandling
         parent::__construct('simpletca_tsconfig', $cache);
     }
 
+    #[\Override]
     protected function initData(): void
     {
         $this->data = new TsConfigCacheable();
     }
 
+    #[\Override]
     protected function debugOutput(): string
     {
         return $this->getFullTsConfig();

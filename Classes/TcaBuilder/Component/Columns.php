@@ -200,6 +200,7 @@ class Columns implements ComponentInterface
         }
     }
 
+    #[\Override]
     public function getArray(): array
     {
         $this->addDefaultColumns();

@@ -11,16 +11,19 @@ use TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
  */
 class FileShortcut extends AbstractShortcut implements DataProcessorInterface
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "file";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['minitems', 'maxitems', 'overrideChildTca', 'allowed'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
@@ -28,6 +31,7 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
         ];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(
@@ -36,11 +40,13 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
         );
     }
 
+    #[\Override]
     public function getDataProcessorType(): string
     {
         return FilesProcessor::class;
     }
 
+    #[\Override]
     public function getDataProcessorConfig(string $fieldName): array
     {
         return [

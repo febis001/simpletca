@@ -71,9 +71,8 @@ class TcaGenerator extends ShortcutImplementation
     ): FceGenerator {
         self::getConfig()->setTablename('tt_content');
         $extKey = self::getConfig()->getExtkey();
-        $tsConfigFceGroupIdentifier = $tsConfigFceGroupIdentifier
-            ?? self::getConfig()->get('tsConfigFceGroup')
-            ?? 'default';
+        $tsConfigFceGroupIdentifier ??= self::getConfig()->get('tsConfigFceGroup')
+        ?? 'default';
         self::$tmpItemConfig = GeneralUtility::makeInstance(ItemConfig::class, $identifier);
 
         return GeneralUtility::makeInstance(

@@ -35,6 +35,7 @@ class Control implements ComponentInterface
     ) {
     }
 
+    #[\Override]
     public function getArray(): array
     {
         $ctrl = [

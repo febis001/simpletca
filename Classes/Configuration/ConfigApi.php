@@ -31,7 +31,7 @@ trait ConfigApi
                 break;
             default:
                 throw new InvalidConfigException(
-                    sprintf('The config type \'%s\' does not exist.', $level),
+                    sprintf("The config type '%s' does not exist.", $level),
                     1729511178,
                 );
         }
@@ -85,7 +85,7 @@ trait ConfigApi
     {
         try {
             $this->set('tablenameOverride', $tablename);
-        } catch (InvalidConfigException $e) {
+        } catch (InvalidConfigException) {
             // Should never occur at this time, because default Level is used
         }
     }

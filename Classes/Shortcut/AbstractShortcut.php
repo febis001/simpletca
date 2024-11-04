@@ -76,6 +76,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         return $this;
     }
 
+    #[\Override]
     public function withArguments(?array $args): static
     {
         foreach ($args as $argName => $arg) {
@@ -104,6 +105,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
      * @throws NoIdentifierException
      * @throws NoTablenameException
      */
+    #[\Override]
     public function build(): array
     {
         if (null === $this->identifier) {
@@ -257,16 +259,19 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         return $filtered !== [] ? reset($filtered) : null;
     }
 
+    #[\Override]
     public function offsetExists(mixed $offset): bool
     {
         return property_exists(static::class, $offset);
     }
 
+    #[\Override]
     public function offsetGet(mixed $offset): mixed
     {
         return $this->offsetExists($offset) ? $this->$offset : null;
     }
 
+    #[\Override]
     public function offsetSet(mixed $offset, mixed $value): void
     {
         if ($this->offsetExists($offset)) {
@@ -274,6 +279,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         }
     }
 
+    #[\Override]
     public function offsetUnset(mixed $offset): void
     {
         if ($this->offsetExists($offset)) {

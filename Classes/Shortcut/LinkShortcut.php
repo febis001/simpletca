@@ -9,21 +9,25 @@ use Febis\SimpleTca\Data\Field;
  */
 class LinkShortcut extends AbstractShortcut
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "link";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['allowedTypes'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(

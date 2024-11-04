@@ -55,6 +55,7 @@ class Types implements ComponentInterface
                     --palette--;;paletteAccess,';
     }
 
+    #[\Override]
     public function getArray(): array
     {
         return ['types' => array_merge($this->getDefaultType(), $this->additionalTypes)];

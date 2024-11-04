@@ -15,16 +15,19 @@ use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
  */
 class RelationShortcut extends AbstractShortcut implements RecursiveDataProcessorInterface
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "group";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['allowed', 'minitems', 'maxitems', 'size'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
@@ -32,6 +35,7 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
         ];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(
@@ -40,6 +44,7 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
         );
     }
 
+    #[\Override]
     protected function addFieldForDbGeneration(string $identifier): void
     {
         parent::addFieldForDbGeneration($identifier);
@@ -51,11 +56,13 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
         );
     }
 
+    #[\Override]
     public function getDataProcessorType(): string
     {
         return DatabaseQueryProcessor::class;
     }
 
+    #[\Override]
     public function getDataProcessorConfig(string $fieldName): array
     {
         return [
@@ -69,6 +76,7 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
         ];
     }
 
+    #[\Override]
     public function getTcaTable(): string
     {
         return $this->allowed;

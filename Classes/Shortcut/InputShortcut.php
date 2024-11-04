@@ -11,16 +11,19 @@ use Febis\SimpleTca\Data\Field;
  */
 class InputShortcut extends AbstractShortcut
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "input";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['eval', 'renderType', 'required'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
@@ -28,6 +31,7 @@ class InputShortcut extends AbstractShortcut
         ];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(

@@ -10,16 +10,19 @@ use Febis\SimpleTca\Data\Field;
  */
 class SlugShortcut extends AbstractShortcut
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "slug";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['size', 'eval'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
@@ -39,6 +42,7 @@ class SlugShortcut extends AbstractShortcut
         ];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(

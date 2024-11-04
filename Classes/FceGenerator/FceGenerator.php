@@ -26,14 +26,14 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class FceGenerator
 {
-    protected final const CONTENT_TABLE = 'tt_content';
+    protected final const string CONTENT_TABLE = 'tt_content';
 
-    protected final const FIELDS = [
+    protected final const array FIELDS = [
         'rowDescription' => 'rowDescription,',
         'categories' => 'categories,',
     ];
 
-    protected final const PALETTES = [
+    protected final const array PALETTES = [
         'general' => '--palette--;;general,',
         'headers' => '--palette--;;headers,',
         'frames' => '--palette--;;frames,',
@@ -43,7 +43,7 @@ class FceGenerator
         'language' => '--palette--;;language,',
     ];
 
-    protected final const TABS = [
+    protected final const array TABS = [
         'general' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,',
         'appearance' => '--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.appearance,',
         'access' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,',
@@ -53,7 +53,7 @@ class FceGenerator
         'categories' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,',
     ];
 
-    protected final const JOINED = [
+    protected final const array JOINED = [
         'generalPrepend' => self::TABS['general'] . self::PALETTES['general'] . self::PALETTES['headers'],
         'appearance' => self::TABS['appearance'] . self::PALETTES['frames'] . self::PALETTES['appearanceLinks'],
         'access' => self::TABS['access'] . self::PALETTES['hidden'] . self::PALETTES['access'],

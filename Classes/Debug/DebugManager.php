@@ -6,6 +6,7 @@ class DebugManager implements DebugInterface
 {
     protected array $data = [];
 
+    #[\Override]
     public function add(mixed $debugData, string | int | null $key = null): void
     {
         if (static::isDebugEnabled()) {
@@ -17,6 +18,7 @@ class DebugManager implements DebugInterface
         }
     }
 
+    #[\Override]
     public function get(): array
     {
         return $this->data;

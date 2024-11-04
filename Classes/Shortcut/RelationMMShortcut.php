@@ -16,16 +16,19 @@ use Febis\SimpleTca\TcaGenerator;
  */
 class RelationMMShortcut extends AbstractShortcut
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "group";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['allowed', 'minitems', 'maxitems', 'size', 'MM', 'MM_opposite_field'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
@@ -33,6 +36,7 @@ class RelationMMShortcut extends AbstractShortcut
         ];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(
@@ -41,6 +45,7 @@ class RelationMMShortcut extends AbstractShortcut
         );
     }
 
+    #[\Override]
     protected function addFieldForDbGeneration(string $identifier): void
     {
         parent::addFieldForDbGeneration($identifier);
@@ -64,6 +69,7 @@ class RelationMMShortcut extends AbstractShortcut
         parent::__construct($identifier);
     }
 
+    #[\Override]
     protected function buildConfig(): array
     {
         $config = parent::buildConfig();

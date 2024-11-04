@@ -9,21 +9,25 @@ use Febis\SimpleTca\Data\Field;
  */
 class CheckboxShortcut extends AbstractShortcut
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "check";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['renderType'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(

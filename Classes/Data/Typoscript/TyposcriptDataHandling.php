@@ -23,11 +23,13 @@ class TyposcriptDataHandling extends AbstractDataHandling
         parent::__construct('simpletca_typoscript', $cache);
     }
 
+    #[\Override]
     protected function initData(): void
     {
         $this->data = new TyposcriptCacheable();
     }
 
+    #[\Override]
     protected function debugOutput(): string
     {
         return $this->getFullTyposcript();

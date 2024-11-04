@@ -10,21 +10,25 @@ use Febis\SimpleTca\Data\Field;
  */
 class SelectSingleShortcut extends AbstractShortcut
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "select";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['items', 'renderType'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(

@@ -14,16 +14,19 @@ use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
  */
 class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInterface
 {
+    #[\Override]
     protected static function getType(): string
     {
         return "inline";
     }
 
+    #[\Override]
     protected static function getAllowedProperties(): array
     {
         return ['foreign_table', 'minitems', 'maxitems'];
     }
 
+    #[\Override]
     protected static function getDefaultProperties(): array
     {
         return [
@@ -37,6 +40,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
         ];
     }
 
+    #[\Override]
     protected static function getSqlDefinition(): Field
     {
         return new Field(
@@ -45,6 +49,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
         );
     }
 
+    #[\Override]
     protected function addFieldForDbGeneration(string $identifier): void
     {
         parent::addFieldForDbGeneration($identifier);
@@ -56,11 +61,13 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
         );
     }
 
+    #[\Override]
     public function getDataProcessorType(): string
     {
         return DatabaseQueryProcessor::class;
     }
 
+    #[\Override]
     public function getDataProcessorConfig(string $fieldName): array
     {
         return [
@@ -74,6 +81,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
         ];
     }
 
+    #[\Override]
     public function getTcaTable(): string
     {
         return $this->foreignTable;

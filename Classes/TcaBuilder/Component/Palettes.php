@@ -68,6 +68,7 @@ class Palettes implements ComponentInterface
         ];
     }
 
+    #[\Override]
     public function getArray(): array
     {
         return ['palettes' => $this->palettes];
