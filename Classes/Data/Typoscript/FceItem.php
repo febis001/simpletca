@@ -2,8 +2,8 @@
 
 namespace Febis\SimpleTca\Data\Typoscript;
 
+use Febis\SimpleTca\Utility\BasicUtility;
 use Febis\SimpleTca\Utility\TypoScriptHelper;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FceItem
 {
@@ -20,7 +20,7 @@ class FceItem
         protected string $baseElement = TyposcriptDataHandling::BASE_DEFAULT,
         protected array $dataProcessors = [],
     ) {
-        $this->templateName ??= GeneralUtility::underscoredToUpperCamelCase($this->identifier);
+        $this->templateName ??= BasicUtility::toUpperCamelCase($this->identifier);
     }
 
     public function generateTyposcript(): string

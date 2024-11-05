@@ -8,7 +8,7 @@ use Febis\SimpleTca\Shortcut\RecursiveDataProcessorInterface;
 
 class DataProcessorUtility
 {
-    public static function generate(array $columns): array
+    public static function generate(array $columns, string $table = 'tt_content'): array
     {
         $dataProcessors = [];
         foreach ($columns as $fieldName => $column) {
@@ -19,12 +19,12 @@ class DataProcessorUtility
             if ($column instanceof RecursiveDataProcessorInterface) {
                 $refTable = $column->getTcaTable();
                 $refTableColumns = $GLOBALS['TCA'][$refTable]['columns'] ?? [];
-                $subDataProcessors = self::generate($refTableColumns);
+                $subDataProcessors = self::generate($refTableColumns, $refTable);
             }
 
             $dataProcessors[] = new DataProcessorItem(
                 $column->getDataProcessorType(),
-                TypoScriptHelper::transformFromTypedTyposcript($column->getDataProcessorConfig($fieldName)),
+                TypoScriptHelper::transformFromTypedTyposcript($column->getDataProcessorConfig($fieldName, $table)),
                 $subDataProcessors ?? [],
             );
         }

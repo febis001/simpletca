@@ -68,7 +68,7 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
     }
 
     #[\Override]
-    public function getDataProcessorConfig(string $fieldName): array
+    public function getDataProcessorConfig(string $fieldName, string $tableName): array
     {
         return [
             'table' => $this->foreignTable,

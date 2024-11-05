@@ -21,5 +21,5 @@ interface DataProcessorInterface
 {
     public function getDataProcessorType(): string;
 
-    public function getDataProcessorConfig(string $fieldName): array;
+    public function getDataProcessorConfig(string $fieldName, string $tableName): array;
 }

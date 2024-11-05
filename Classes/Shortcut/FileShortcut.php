@@ -47,11 +47,11 @@ class FileShortcut extends AbstractShortcut implements DataProcessorInterface
     }
 
     #[\Override]
-    public function getDataProcessorConfig(string $fieldName): array
+    public function getDataProcessorConfig(string $fieldName, string $tableName): array
     {
         return [
             'references' => [
-                'table' => 'tt_content',
+                'table' => $tableName,
                 'fieldName' => $fieldName,
             ],
             'as' => $fieldName

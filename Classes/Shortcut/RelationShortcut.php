@@ -63,7 +63,7 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
     }
 
     #[\Override]
-    public function getDataProcessorConfig(string $fieldName): array
+    public function getDataProcessorConfig(string $fieldName, string $tableName): array
     {
         return [
             'table' => $this->allowed,
