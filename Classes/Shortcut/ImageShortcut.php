@@ -63,7 +63,7 @@ class ImageShortcut extends AbstractShortcut implements DataProcessorInterface
     }
 
     #[\Override]
-    public function getDataProcessorConfig(string $fieldName): array
+    public function getDataProcessorConfig(string $fieldName, string $tableName): array
     {
         return [
             'references' => [
