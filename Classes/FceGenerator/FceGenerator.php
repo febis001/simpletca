@@ -213,9 +213,11 @@ class FceGenerator
             static::CONTENT_TABLE,
             'CType',
             [
-                $this->getLabel(),
-                $this->identifier,
-                $this->icon,
+                'label' => $this->getLabel(),
+                'value' => $this->identifier,
+                'icon' => $this->icon,
+                'group' => $this->tsConfigFceGroupIdentifier,
+                'description' => $this->description,
             ],
         );
 
