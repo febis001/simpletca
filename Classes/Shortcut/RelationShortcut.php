@@ -67,9 +67,8 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
     {
         return [
             'table' => $this->allowed,
-            'where.data' => 'field:uid',
-            'where.wrap' => 'parent=|',
-            'pidInList.field' => 'pid',
+            'pidInList' => 0,
+            'uidInList.field' => $fieldName,
             'orderBy' => 'sorting',
 
             'as' => $fieldName
