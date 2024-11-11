@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  * TODO: add recursively comparison for attributes to load default or overridden values
  * TODO: refactor split into separate classes to maintain responsibilities
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 {
@@ -36,6 +37,10 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     protected ?string $description = null;
 
     protected bool $exclude = true;
+
+    protected ?string $onChange = null;
+
+    protected string | array | null $displayCond = null;
 
     public function __construct(
         protected ?string $identifier = null,
@@ -74,6 +79,25 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         $this->exclude = $exclude;
 
         return $this;
+    }
+
+    public function withDisplayCond(string | array | null $displayCond = null): static
+    {
+        $this->displayCond = $displayCond;
+
+        return $this;
+    }
+
+    public function withOnChange(?string $onChange = 'reload'): static
+    {
+        $this->onChange = $onChange;
+
+        return $this;
+    }
+
+    public function withReload(): static
+    {
+        return $this->withOnChange();
     }
 
     #[\Override]
@@ -126,13 +150,23 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 
     protected function buildContainer(): array
     {
-        return [
+        $container = [
             '_identifier' => $this->identifier,
             'label' => $this->label,
             'description' => $this->description,
             'exclude' => $this->exclude,
             'config' => [],
         ];
+
+        if ($this->displayCond) {
+            $container['displayCond'] = $this->displayCond;
+        }
+
+        if ($this->onChange) {
+            $container['onChange'] = $this->onChange;
+        }
+
+        return $container;
     }
 
     /**
@@ -253,7 +287,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     {
         $filtered = array_filter(
             static::getAllowedProperties(),
-            static fn($property) => static::toLowerCamelCase($property) === $lcc,
+            static fn ($property) => static::toLowerCamelCase($property) === $lcc,
         );
 
         return $filtered !== [] ? reset($filtered) : null;
