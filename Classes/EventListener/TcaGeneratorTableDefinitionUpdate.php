@@ -17,8 +17,8 @@ class TcaGeneratorTableDefinitionUpdate
     {
         $event->setSqlData(
             [
+                ...TcaGenerator::getTcaDefinitionDataInstance()->getSqlArray(),
                 ...$event->getSqlData(),
-                ...TcaGenerator::getTcaDefinitionDataInstance()->getSqlArray()
             ],
         );
     }
