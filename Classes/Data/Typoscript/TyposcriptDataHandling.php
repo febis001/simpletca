@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Data\Typoscript;
 
 use Febis\SimpleTca\Data\AbstractDataHandling;
@@ -21,18 +23,6 @@ class TyposcriptDataHandling extends AbstractDataHandling
     public function __construct(?PhpFrontend $cache = null)
     {
         parent::__construct('simpletca_typoscript', $cache);
-    }
-
-    #[\Override]
-    protected function initData(): void
-    {
-        $this->data = new TyposcriptCacheable();
-    }
-
-    #[\Override]
-    protected function debugOutput(): string
-    {
-        return $this->getFullTyposcript();
     }
 
     public function getBaseFceItemFor(string $extKey): ?string
@@ -73,9 +63,9 @@ class TyposcriptDataHandling extends AbstractDataHandling
     {
         if ($this->hasFceItem($identifier) && !$override) {
             throw new TyposcriptExistsException($identifier);
-        } else {
-            $this->data->fceItems[$identifier] = $fceItem;
         }
+
+        $this->data->fceItems[$identifier] = $fceItem;
 
         $this->writeData();
 
@@ -109,5 +99,17 @@ class TyposcriptDataHandling extends AbstractDataHandling
         }
 
         return implode("\n", $typoscript);
+    }
+
+    #[\Override]
+    protected function initData(): void
+    {
+        $this->data = new TyposcriptCacheable();
+    }
+
+    #[\Override]
+    protected function debugOutput(): string
+    {
+        return $this->getFullTyposcript();
     }
 }

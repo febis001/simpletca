@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
 use Febis\SimpleTca\Exception\InvalidKeyException;
@@ -25,7 +27,7 @@ class Columns implements ComponentInterface
      */
     public function addColumn(AbstractShortcut | array $column, string | int | null $key = null): void
     {
-        if (false === is_string($key)) {
+        if (is_string($key) === false) {
             if ($column instanceof AbstractShortcut) {
                 $key = $column->getIdentifier();
             } elseif (isset($column['_identifier'])) {
@@ -47,6 +49,17 @@ class Columns implements ComponentInterface
         foreach ($columns as $key => $column) {
             $this->addColumn($column, $key);
         }
+    }
+
+    #[\Override]
+    public function getArray(): array
+    {
+        $this->addDefaultColumns();
+
+        $this->completeLabelPaths();
+        return [
+            'columns' => AbstractShortcut::buildAll($this->columns, $this->table),
+        ];
     }
 
     private function addBaseColumns()
@@ -86,7 +99,7 @@ class Columns implements ComponentInterface
                     'default' => 0,
                     'items' => [
                         [
-                            0 => '',
+                            'label' => '',
                             'invertStateDisplay' => true,
                         ],
                     ],
@@ -96,9 +109,7 @@ class Columns implements ComponentInterface
                 'exclude' => true,
                 'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
                 'config' => [
-                    'type' => 'input',
-                    'renderType' => 'inputDateTime',
-                    'eval' => 'datetime,int',
+                    'type' => 'datetime',
                     'default' => 0,
                 ],
                 'l10n_mode' => 'exclude',
@@ -108,9 +119,7 @@ class Columns implements ComponentInterface
                 'exclude' => true,
                 'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
                 'config' => [
-                    'type' => 'input',
-                    'renderType' => 'inputDateTime',
-                    'eval' => 'datetime,int',
+                    'type' => 'datetime',
                     'default' => 0,
                     'range' => [
                         'upper' => mktime(0, 0, 0, 1, 1, 2038),
@@ -135,12 +144,12 @@ class Columns implements ComponentInterface
                     'foreign_table_where' => 'ORDER BY sys_language.title',
                     'items' => [
                         [
-                            'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
-                            -1,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
+                            'value' => -1,
                         ],
                         [
-                            'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.default_value',
-                            0,
+                            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.default_value',
+                            'value' => 0,
                         ],
                     ],
                     'allowNonIdValues' => true,
@@ -155,8 +164,8 @@ class Columns implements ComponentInterface
                     'renderType' => 'selectSingle',
                     'items' => [
                         [
-                            '',
-                            0,
+                            'label' => '',
+                            'value' => 0,
                         ],
                     ],
                     'foreign_table' => $this->table,
@@ -198,14 +207,5 @@ class Columns implements ComponentInterface
 
             $this->columns[$key]['label'] = TcaGenerator::translate($this->columns[$key]['label']);
         }
-    }
-
-    #[\Override]
-    public function getArray(): array
-    {
-        $this->addDefaultColumns();
-
-        $this->completeLabelPaths();
-        return ['columns' => $this->columns];
     }
 }

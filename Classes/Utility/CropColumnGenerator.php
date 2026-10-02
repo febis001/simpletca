@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Utility;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -12,8 +14,8 @@ class CropColumnGenerator
         'config' => [
             'cropVariants' => [
 
-            ]
-        ]
+            ],
+        ],
     ];
 
     public function forAllCropVariants(): static
@@ -42,7 +44,7 @@ class CropColumnGenerator
 
         foreach ($this->cropVariants as $variant) {
             $cropVariants[$variant] = [
-                'allowedAspectRatios' => $this->generateDisabledConfig($disabledRatios)
+                'allowedAspectRatios' => $this->generateDisabledConfig($disabledRatios),
             ];
         }
 
@@ -69,7 +71,9 @@ class CropColumnGenerator
 
     protected function generateDisabledConfig(array $disabledRatios): array
     {
-        return array_map(static fn() => ['disabled' => true], array_flip($disabledRatios));
+        return array_map(static fn () => [
+            'disabled' => true,
+        ], array_flip($disabledRatios));
     }
 
     protected static function getAvailableRatios(): array
@@ -93,6 +97,6 @@ class CropColumnGenerator
         $variants =
             BackendUtility::getPagesTSconfig(1)['TCEFORM.']['sys_file_reference.']['crop.']['config.']['cropVariants.']
             ?? [];
-        return array_map(static fn($variant) => trim($variant, '.'), array_keys($variants));
+        return array_map(static fn ($variant) => trim($variant, '.'), array_keys($variants));
     }
 }

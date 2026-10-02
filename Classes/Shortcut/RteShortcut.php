@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 use Febis\SimpleTca\Utility\ErrorUtility;
@@ -10,10 +12,19 @@ use Febis\SimpleTca\Utility\ErrorUtility;
  */
 class RteShortcut extends AbstractShortcut
 {
+    public function __construct(
+        ?string $identifier = null,
+        protected ?bool $required = null,
+    ) {
+        ErrorUtility::triggerDeprecated(self::class, TextShortcut::class);
+
+        parent::__construct($identifier);
+    }
+
     #[\Override]
     protected static function getType(): string
     {
-        return "text";
+        return 'text';
     }
 
     #[\Override]
@@ -28,14 +39,5 @@ class RteShortcut extends AbstractShortcut
         return [
             'enableRichtext' => true,
         ];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-        protected ?bool $required = null,
-    ) {
-        ErrorUtility::triggerDeprecated(self::class, TextShortcut::class);
-
-        parent::__construct($identifier);
     }
 }

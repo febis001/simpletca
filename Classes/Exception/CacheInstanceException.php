@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Exception;
 
 /** Exception thrown when something is wrong with instantiating the cache. */

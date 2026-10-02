@@ -3,7 +3,7 @@
     "description": "Provides shortcuts and utilities for simple TCA generation",
     "license": "proprietary",
     "type": "typo3-cms-extension",
-    "version": "13.2.5",
+    "version": "14.0.0",
     "keywords": [
         "TYPO3",
         "extension"
@@ -17,15 +17,16 @@
     "require": {
         "php": "^8.3",
         "helhum/dotenv-connector": "^3.1",
-        "typo3/minimal": "^13"
+        "typo3/minimal": "^14"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.44",
-        "friendsoftypo3/phpstan-typo3": "^0.9",
         "overtrue/phplint": "^9.5",
         "phpmd/phpmd": "^2.15",
-        "squizlabs/php_codesniffer": "^3.10",
-        "ssch/typo3-rector": "^2.11"
+        "symplify/easy-coding-standard": "^12.5",
+        "phpstan/phpstan": "^2.1",
+        "saschaegerer/phpstan-typo3": "^3.1",
+        "ssch/typo3-rector": "^3.14"
     },
     "replace": {
         "typo3-ter/simpletca": "self.version"
@@ -55,12 +56,17 @@
     },
     "scripts": {
         "lint:all": [
-            "@lint:phpcs",
+            "@lint:phpecs",
             "@lint:phpmd",
-            "@lint:phplint"
+            "@lint:phplint",
+            "@lint:phpstan",
+            "@lint:rector"
         ],
-        "lint:phpcs": [
-            "bin/phpcs -s -p --standard=.testing/phpcs/ruleset.xml"
+        "lint:phpecs": [
+            "bin/ecs check --config .testing/phpecs/ecs.php"
+        ],
+        "lint:phpecs:fix": [
+            "bin/ecs check --fix --config .testing/phpecs/ecs.php"
         ],
         "lint:phplint": [
             "bin/phplint -v --ansi --no-cache ./ --exclude vendor"
@@ -68,17 +74,13 @@
         "lint:phpmd": [
             "bin/phpmd ./ ansi .testing/phpmd/ruleset.xml"
         ],
-        "test:all": [
-            "@test:phpstan",
-            "@test:rector:dry"
-        ],
-        "test:phpstan": [
+        "lint:phpstan": [
             "php -d memory_limit=4G bin/phpstan analyse -c .testing/phpstan/phpstan.neon ./"
         ],
-        "test:rector": [
+        "lint:rector": [
             "bin/rector process --config=.testing/rector/rector.php ./"
         ],
-        "test:rector:dry": [
+        "lint:rector:dry": [
             "bin/rector process --config=.testing/rector/rector.php --dry-run ./"
         ]
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Utility;
 
 class TypoScriptHelper
@@ -12,7 +14,7 @@ class TypoScriptHelper
      * Transforms a php object into a readable typoscript notation
      */
     public static function objectToTextualRepresentation(
-        string $key,
+        int|string $key,
         array $tsObject,
         int $prevIndent = 0,
     ): string {
@@ -46,7 +48,7 @@ class TypoScriptHelper
      */
     public static function indent(int $count): string
     {
-        return str_repeat(" ", $count);
+        return str_repeat(' ', $count);
     }
 
     /**
@@ -54,7 +56,7 @@ class TypoScriptHelper
      */
     public static function snakeToCamel(string $input): string
     {
-        return implode('', array_map('ucfirst', explode('_', $input)));
+        return implode('', array_map(ucfirst(...), explode('_', $input)));
     }
 
     public static function transformFromTypedTyposcript(array $input): array

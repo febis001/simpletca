@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Data;
 
 use Febis\SimpleTca\Data\Cacheable\CacheableInterface;
@@ -20,6 +22,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /** @SuppressWarnings(PHPMD.CouplingBetweenObjects) */
 class CacheHandler
 {
+    public function __construct(
+        protected string $cacheIdentifier,
+        protected ?PhpFrontend $codeCache = null,
+    ) {
+    }
+
     /**
      * @throws CacheInstanceException
      */
@@ -32,10 +40,29 @@ class CacheHandler
         return $cacheHandler;
     }
 
-    public function __construct(
-        protected string $cacheIdentifier,
-        protected ?PhpFrontend $codeCache = null,
-    ) {
+    /**
+     * @throws CacheInstanceException
+     */
+    public function createCacheFile(CacheableInterface $data): void
+    {
+        try {
+            $this->getCodeCache()->set(
+                $this->getConcreteCacheFilename(),
+                'return '
+                . var_export($data, true)
+                . ';',
+            );
+        } catch (InvalidDataException $invalidDataException) {
+            throw new CacheInstanceException($invalidDataException, 1723718256);
+        }
+    }
+
+    /**
+     * @throws CacheInstanceException
+     */
+    public function readCacheFile(): CacheableInterface | false
+    {
+        return $this->getCodeCache()->requireOnce($this->getConcreteCacheFilename());
     }
 
     /**
@@ -100,32 +127,7 @@ class CacheHandler
 
     protected function getConcreteCacheFilename(): string
     {
-        return (new PackageDependentCacheIdentifier(GeneralUtility::makeInstance(PackageManager::class)))
+        return new PackageDependentCacheIdentifier(GeneralUtility::makeInstance(PackageManager::class))
             ->withPrefix($this->cacheIdentifier)->toString();
-    }
-
-    /**
-     * @throws CacheInstanceException
-     */
-    public function createCacheFile(CacheableInterface $data): void
-    {
-        try {
-            $this->getCodeCache()->set(
-                $this->getConcreteCacheFilename(),
-                'return '
-                . var_export($data, true)
-                . ';',
-            );
-        } catch (InvalidDataException $invalidDataException) {
-            throw new CacheInstanceException($invalidDataException, 1723718256);
-        }
-    }
-
-    /**
-     * @throws CacheInstanceException
-     */
-    public function readCacheFile(): CacheableInterface | false
-    {
-        return $this->getCodeCache()->requireOnce($this->getConcreteCacheFilename());
     }
 }

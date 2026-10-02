@@ -34,15 +34,18 @@ services:
         public: true
 
     Febis\SimpleTca\EventListener\TcaGeneratorBuildTca:
+        tags:
             -   name: event.listener
                 identifier: 'simpletca-tcagenerator-build-tca'
                 event: TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent
                 before: 'nr-rte-softref-enforcer'
     Febis\SimpleTca\EventListener\FcePageTsConfig:
+        tags:
             -   name: event.listener
                 identifier: 'simpletca-fcegenerator-generate-tsconfig'
                 event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\ModifyLoadedPageTsConfigEvent
     Febis\SimpleTca\EventListener\TypoScriptLoader:
+        tags:
             -   name: event.listener
                 identifier: 'simpletca-typoscriptloader'
                 event: TYPO3\CMS\Core\TypoScript\IncludeTree\Event\AfterTemplatesHaveBeenDeterminedEvent

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
@@ -12,29 +14,14 @@ use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
  */
 class RelationShortcut extends AbstractShortcut implements RecursiveDataProcessorInterface
 {
-    #[\Override]
-    protected static function getType(): string
-    {
-        return "group";
-    }
-
-    #[\Override]
-    protected static function getAllowedProperties(): array
-    {
-        return [
-            'allowed',
-            'minitems',
-            'maxitems',
-            'size',
-        ];
-    }
-
-    #[\Override]
-    protected static function getDefaultProperties(): array
-    {
-        return [
-            'size' => 1,
-        ];
+    public function __construct(
+        ?string $identifier = null,
+        protected ?string $allowed = null,
+        protected ?int $size = null,
+        protected ?int $minitems = null,
+        protected ?int $maxitems = null,
+    ) {
+        parent::__construct($identifier);
     }
 
     #[\Override]
@@ -62,24 +49,39 @@ class RelationShortcut extends AbstractShortcut implements RecursiveDataProcesso
         return $this->allowed;
     }
 
-    public function __construct(
-        ?string $identifier = null,
-        protected ?string $allowed = null,
-        protected ?int $size = null,
-        protected ?int $minitems = null,
-        protected ?int $maxitems = null,
-    ) {
-        parent::__construct($identifier);
-    }
-
     public function withItemsRange(?int $minitems = null, ?int $maxitems = null): static
     {
-        $this->unsetAttributes['minitems'] = null === $minitems;
-        $this->unsetAttributes['maxitems'] = null === $maxitems;
+        $this->unsetAttributes['minitems'] = $minitems === null;
+        $this->unsetAttributes['maxitems'] = $maxitems === null;
 
         $this->minitems = $minitems;
         $this->maxitems = $maxitems;
 
         return $this;
+    }
+
+    #[\Override]
+    protected static function getType(): string
+    {
+        return 'group';
+    }
+
+    #[\Override]
+    protected static function getAllowedProperties(): array
+    {
+        return [
+            'allowed',
+            'minitems',
+            'maxitems',
+            'size',
+        ];
+    }
+
+    #[\Override]
+    protected static function getDefaultProperties(): array
+    {
+        return [
+            'size' => 1,
+        ];
     }
 }

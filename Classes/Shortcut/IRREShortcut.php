@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
@@ -11,35 +13,13 @@ use TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor;
  */
 class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInterface
 {
-    #[\Override]
-    protected static function getType(): string
-    {
-        return "inline";
-    }
-
-    #[\Override]
-    protected static function getAllowedProperties(): array
-    {
-        return [
-            'foreign_table',
-            'minitems',
-            'maxitems',
-        ];
-    }
-
-    #[\Override]
-    protected static function getDefaultProperties(): array
-    {
-        return [
-            'foreign_field' => 'parent',
-            'foreign_sortby' => 'sorting',
-            'appearance' => [
-                'collapseAll' => true,
-                'showSynchronizationLink' => true,
-                'showAllLocalizationLink' => true,
-                'showPossibleLocalizationRecords' => true,
-            ],
-        ];
+    public function __construct(
+        ?string $identifier = null,
+        protected ?string $foreignTable = null,
+        protected ?int $minitems = null,
+        protected ?int $maxitems = null,
+    ) {
+        parent::__construct($identifier);
     }
 
     #[\Override]
@@ -68,23 +48,45 @@ class IRREShortcut extends AbstractShortcut implements RecursiveDataProcessorInt
         return $this->foreignTable;
     }
 
-    public function __construct(
-        ?string $identifier = null,
-        protected ?string $foreignTable = null,
-        protected ?int $minitems = null,
-        protected ?int $maxitems = null,
-    ) {
-        parent::__construct($identifier);
-    }
-
     public function withItemsRange(?int $minitems = null, ?int $maxitems = null): static
     {
-        $this->unsetAttributes['minitems'] = null === $minitems;
-        $this->unsetAttributes['maxitems'] = null === $maxitems;
+        $this->unsetAttributes['minitems'] = $minitems === null;
+        $this->unsetAttributes['maxitems'] = $maxitems === null;
 
         $this->minitems = $minitems;
         $this->maxitems = $maxitems;
 
         return $this;
+    }
+
+    #[\Override]
+    protected static function getType(): string
+    {
+        return 'inline';
+    }
+
+    #[\Override]
+    protected static function getAllowedProperties(): array
+    {
+        return [
+            'foreign_table',
+            'minitems',
+            'maxitems',
+        ];
+    }
+
+    #[\Override]
+    protected static function getDefaultProperties(): array
+    {
+        return [
+            'foreign_field' => 'parent',
+            'foreign_sortby' => 'sorting',
+            'appearance' => [
+                'collapseAll' => true,
+                'showSynchronizationLink' => true,
+                'showAllLocalizationLink' => true,
+                'showPossibleLocalizationRecords' => true,
+            ],
+        ];
     }
 }

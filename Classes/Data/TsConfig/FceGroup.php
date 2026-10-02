@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Data\TsConfig;
 
 use Febis\SimpleTca\Utility\TypoScriptHelper;
@@ -13,9 +15,9 @@ class FceGroup
     ) {
     }
 
-    protected function getHeader(): string
+    public static function __set_state(array $data)
     {
-        return $this->header ?? $this->identifier;
+        return new self(...$data);
     }
 
     public function generateTsConfig(): string
@@ -28,8 +30,8 @@ class FceGroup
         return TypoScriptHelper::objectToTextualRepresentation($objectIdentifier, $object);
     }
 
-    public static function __set_state(array $data)
+    protected function getHeader(): string
     {
-        return new self(...$data);
+        return $this->header ?? $this->identifier;
     }
 }

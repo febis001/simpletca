@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -9,10 +11,19 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class InputShortcut extends AbstractShortcut
 {
+    public function __construct(
+        ?string $identifier = null,
+        protected ?string $eval = null,
+        protected ?string $renderType = null,
+        protected ?bool $required = null,
+    ) {
+        parent::__construct($identifier);
+    }
+
     #[\Override]
     protected static function getType(): string
     {
-        return "input";
+        return 'input';
     }
 
     #[\Override]
@@ -31,14 +42,5 @@ class InputShortcut extends AbstractShortcut
         return [
             'eval' => 'trim',
         ];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-        protected ?string $eval = null,
-        protected ?string $renderType = null,
-        protected ?bool $required = null,
-    ) {
-        parent::__construct($identifier);
     }
 }

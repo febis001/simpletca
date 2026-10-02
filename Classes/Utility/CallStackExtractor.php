@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Utility;
 
 use Doctrine\DBAL\Driver\Exception;
@@ -84,7 +86,7 @@ class CallStackExtractor implements SingletonInterface
      */
     protected function getTableList(): array
     {
-        if (null === $this->tableList) {
+        if ($this->tableList === null) {
             if (GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion() < 12) {
                 $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable('tt_content');
             } else {
@@ -94,7 +96,7 @@ class CallStackExtractor implements SingletonInterface
 
             try {
                 $this->tableList = $connection
-                    ->prepare("SHOW TABLES;")
+                    ->prepare('SHOW TABLES;')
                     ->executeQuery()
                     ->fetchFirstColumn();
 

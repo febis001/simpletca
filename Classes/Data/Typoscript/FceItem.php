@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Data\Typoscript;
 
 use Febis\SimpleTca\Utility\BasicUtility;
@@ -23,6 +25,11 @@ class FceItem
         $this->templateName ??= BasicUtility::toUpperCamelCase($this->identifier);
     }
 
+    public static function __set_state(array $data)
+    {
+        return new self(...$data);
+    }
+
     public function generateTyposcript(): string
     {
         $tsObjectName = sprintf('tt_content.%s', $this->identifier);
@@ -34,7 +41,7 @@ class FceItem
         $this->generateAndAppendDataProcessors($this->dataProcessors, $tsObject);
 
         $typoscript = [];
-        $typoscript[] = sprintf("%s =< %s", $tsObjectName, $this->baseElement);
+        $typoscript[] = sprintf('%s =< %s', $tsObjectName, $this->baseElement);
         $typoscript[] = TypoScriptHelper::objectToTextualRepresentation($tsObjectName, $tsObject);
 
         return implode("\n", $typoscript);
@@ -63,10 +70,5 @@ class FceItem
 
             $tsObject[] = ['dataProcessing', $dataProcessors];
         }
-    }
-
-    public static function __set_state(array $data)
-    {
-        return new self(...$data);
     }
 }

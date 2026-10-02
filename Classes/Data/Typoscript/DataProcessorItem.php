@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Data\Typoscript;
 
 class DataProcessorItem
@@ -12,6 +14,11 @@ class DataProcessorItem
         protected array $config,
         protected array $subDataProcessors = [],
     ) {
+    }
+
+    public static function __set_state(array $data)
+    {
+        return new self(...$data);
     }
 
     public function getProcessorClass(): string
@@ -30,10 +37,5 @@ class DataProcessorItem
     public function getSubDataProcessors(): array
     {
         return $this->subDataProcessors;
-    }
-
-    public static function __set_state(array $data)
-    {
-        return new self(...$data);
     }
 }

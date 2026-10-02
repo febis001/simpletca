@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -12,10 +14,33 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class RelationMMShortcut extends AbstractShortcut
 {
+    public function __construct(
+        ?string $identifier = null,
+        protected ?string $allowed = null,
+        protected ?string $mM = null,
+        protected ?string $mMOppositeField = null,
+        protected ?int $size = null,
+        protected ?int $minitems = null,
+        protected ?int $maxitems = null,
+    ) {
+        parent::__construct($identifier);
+    }
+
+    public function withItemsRange(?int $minitems = null, ?int $maxitems = null): static
+    {
+        $this->unsetAttributes['minitems'] = $minitems === null;
+        $this->unsetAttributes['maxitems'] = $maxitems === null;
+
+        $this->minitems = $minitems;
+        $this->maxitems = $maxitems;
+
+        return $this;
+    }
+
     #[\Override]
     protected static function getType(): string
     {
-        return "group";
+        return 'group';
     }
 
     #[\Override]
@@ -39,18 +64,6 @@ class RelationMMShortcut extends AbstractShortcut
         ];
     }
 
-    public function __construct(
-        ?string $identifier = null,
-        protected ?string $allowed = null,
-        protected ?string $mM = null,
-        protected ?string $mMOppositeField = null,
-        protected ?int $size = null,
-        protected ?int $minitems = null,
-        protected ?int $maxitems = null,
-    ) {
-        parent::__construct($identifier);
-    }
-
     #[\Override]
     protected function buildConfig(): array
     {
@@ -58,16 +71,5 @@ class RelationMMShortcut extends AbstractShortcut
         $config['foreign_table'] = $this->allowed;
 
         return $config;
-    }
-
-    public function withItemsRange(?int $minitems = null, ?int $maxitems = null): static
-    {
-        $this->unsetAttributes['minitems'] = null === $minitems;
-        $this->unsetAttributes['maxitems'] = null === $maxitems;
-
-        $this->minitems = $minitems;
-        $this->maxitems = $maxitems;
-
-        return $this;
     }
 }

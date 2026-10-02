@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\TcaBuilder;
 
 use Febis\SimpleTca\TcaBuilder\Component\Columns;

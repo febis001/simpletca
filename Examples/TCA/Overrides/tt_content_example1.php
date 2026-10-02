@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Febis\SimpleTca\TcaGenerator;
 
 defined('TYPO3') || die();
@@ -53,9 +55,18 @@ $fce->addColumns(
         TcaGenerator::createCheckbox('check')->withRenderType('checkboxToggle'),
         TcaGenerator::createSelectSingle('select')->withItems(
             [
-                ['label' => '1', 'value' => 1],
-                ['label' => '2', 'value' => 2],
-                ['label' => '3', 'value' => 3],
+                [
+                    'label' => '1',
+                    'value' => 1,
+                ],
+                [
+                    'label' => '2',
+                    'value' => 2,
+                ],
+                [
+                    'label' => '3',
+                    'value' => 3,
+                ],
             ],
         ),
 

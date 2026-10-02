@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Data\TsConfig;
 
 use Febis\SimpleTca\Data\AbstractDataHandling;
@@ -19,18 +21,6 @@ class TsConfigDataHandling extends AbstractDataHandling
         parent::__construct('simpletca_tsconfig', $cache);
     }
 
-    #[\Override]
-    protected function initData(): void
-    {
-        $this->data = new TsConfigCacheable();
-    }
-
-    #[\Override]
-    protected function debugOutput(): string
-    {
-        return $this->getFullTsConfig();
-    }
-
     public function hasFceItem(string $identifier): bool
     {
         return isset($this->data->fceItems[$identifier]);
@@ -44,9 +34,9 @@ class TsConfigDataHandling extends AbstractDataHandling
     {
         if ($this->hasFceItem($identifier) && !$override) {
             throw new TsConfigExistsException($identifier, false);
-        } else {
-            $this->data->fceItems[$identifier] = $fceItem;
         }
+
+        $this->data->fceItems[$identifier] = $fceItem;
 
         $this->writeData();
 
@@ -80,9 +70,9 @@ class TsConfigDataHandling extends AbstractDataHandling
     {
         if ($this->hasFceGroup($identifier) && !$override) {
             throw new TsConfigExistsException($identifier, true);
-        } else {
-            $this->data->fceGroups[$identifier] = $fceGroup;
         }
+
+        $this->data->fceGroups[$identifier] = $fceGroup;
 
         $this->writeData();
 
@@ -116,5 +106,17 @@ class TsConfigDataHandling extends AbstractDataHandling
         }
 
         return implode("\n", $tsConfig);
+    }
+
+    #[\Override]
+    protected function initData(): void
+    {
+        $this->data = new TsConfigCacheable();
+    }
+
+    #[\Override]
+    protected function debugOutput(): string
+    {
+        return $this->getFullTsConfig();
     }
 }

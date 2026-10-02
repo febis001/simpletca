@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 class PassthroughShortcut extends AbstractShortcut
@@ -11,7 +13,7 @@ class PassthroughShortcut extends AbstractShortcut
     #[\Override]
     protected static function getType(): string
     {
-        return "passthrough";
+        return 'passthrough';
     }
 
     #[\Override]
@@ -24,11 +26,5 @@ class PassthroughShortcut extends AbstractShortcut
     protected static function getDefaultProperties(): array
     {
         return [];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-    ) {
-        parent::__construct($identifier);
     }
 }

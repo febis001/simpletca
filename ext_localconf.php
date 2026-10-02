@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Febis\SimpleTca\Hook\TyposcriptLoader;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;

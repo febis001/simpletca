@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca;
 
 use Febis\SimpleTca\Exception\CallstackExtractionException;
@@ -35,7 +37,7 @@ use ReflectionException;
  * @method static ColorShortcut createColor($identifier = null, $required = false)
  * @method static DatetimeShortcut createDatetime($identifier = null, $required = false)
  * @method static EmailShortcut createEmail($identifier = null, $eval = null, $required = false)
- * @method static FileShortcut createFile($identifier = null, $minitems = null, $maxitems = null, $allowed = null)
+ * @method static FileShortcut createFile($identifier = null, $minitems = null, $maxitems = null, $allowed = null, $as = null)
  * @method static InputShortcut createInput($identifier = null, $eval = null, $renderType = null, $required = false)
  * @method static IRREShortcut createIRRE($identifier = null, $foreignTable = null, $minitems = null, $maxitems = null)
  * @method static LinkShortcut createLink($identifier = null)

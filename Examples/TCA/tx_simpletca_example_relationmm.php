@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Febis\SimpleTca\TcaGenerator;
 
 defined('TYPO3') || die('Access denied.');

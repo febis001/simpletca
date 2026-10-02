@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Data\TsConfig;
 
 use Febis\SimpleTca\Utility\TypoScriptHelper;
@@ -15,14 +17,9 @@ class FceItem
     ) {
     }
 
-    protected function getTitle(): string
+    public static function __set_state(array $data)
     {
-        return $this->title ?? $this->identifier;
-    }
-
-    protected function getDescription(): ?string
-    {
-        return $this->description;
+        return new self(...$data);
     }
 
     public function generateTsConfig(): string
@@ -65,8 +62,13 @@ class FceItem
         return TypoScriptHelper::objectToTextualRepresentation($objectIdentifier, $object);
     }
 
-    public static function __set_state(array $data)
+    protected function getTitle(): string
     {
-        return new self(...$data);
+        return $this->title ?? $this->identifier;
+    }
+
+    protected function getDescription(): ?string
+    {
+        return $this->description;
     }
 }

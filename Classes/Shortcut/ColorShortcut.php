@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -19,7 +21,7 @@ class ColorShortcut extends AbstractShortcut
     #[\Override]
     protected static function getType(): string
     {
-        return "color";
+        return 'color';
     }
 
     #[\Override]

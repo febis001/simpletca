@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -20,7 +22,7 @@ class EmailShortcut extends AbstractShortcut
     #[\Override]
     protected static function getType(): string
     {
-        return "email";
+        return 'email';
     }
 
     #[\Override]

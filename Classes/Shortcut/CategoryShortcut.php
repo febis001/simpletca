@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -21,7 +23,7 @@ class CategoryShortcut extends AbstractShortcut
     #[\Override]
     protected static function getType(): string
     {
-        return "category";
+        return 'category';
     }
 
     #[\Override]

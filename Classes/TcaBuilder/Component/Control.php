@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
 use TYPO3\CMS\Core\Information\Typo3Version;

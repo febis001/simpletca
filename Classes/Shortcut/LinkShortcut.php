@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -7,10 +9,11 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class LinkShortcut extends AbstractShortcut
 {
+
     #[\Override]
     protected static function getType(): string
     {
-        return "link";
+        return 'link';
     }
 
     #[\Override]
@@ -23,11 +26,5 @@ class LinkShortcut extends AbstractShortcut
     protected static function getDefaultProperties(): array
     {
         return [];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-    ) {
-        parent::__construct($identifier);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -8,10 +10,18 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class SlugShortcut extends AbstractShortcut
 {
+    public function __construct(
+        ?string $identifier = null,
+        protected ?string $size = null,
+        protected ?string $eval = null,
+    ) {
+        parent::__construct($identifier);
+    }
+
     #[\Override]
     protected static function getType(): string
     {
-        return "slug";
+        return 'slug';
     }
 
     #[\Override]
@@ -41,13 +51,5 @@ class SlugShortcut extends AbstractShortcut
             'eval' => 'uniqueInSite',
             'default' => '',
         ];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-        protected ?string $size = null,
-        protected ?string $eval = null,
-    ) {
-        parent::__construct($identifier);
     }
 }

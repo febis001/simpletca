@@ -14,7 +14,7 @@ final class TypoScriptLoader
         $rows = $event->getTemplateRows();
 
         $rootLine = $event->getRootline();
-        if ([] === $rootLine) {
+        if ($rootLine === []) {
             return;
         }
 

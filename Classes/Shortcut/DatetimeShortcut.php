@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -20,7 +22,7 @@ class DatetimeShortcut extends AbstractShortcut
     #[\Override]
     protected static function getType(): string
     {
-        return "datetime";
+        return 'datetime';
     }
 
     #[\Override]

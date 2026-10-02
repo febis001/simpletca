@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Data;
 
 use Febis\SimpleTca\Data\Cacheable\BaseCacheable;
@@ -11,10 +13,6 @@ abstract class AbstractDataHandling
     protected BaseCacheable $data;
 
     protected CacheHandler $cacheHandler;
-
-    abstract protected function debugOutput(): mixed;
-
-    abstract protected function initData(): void;
 
     /**
      * @throws CacheInstanceException
@@ -30,6 +28,10 @@ abstract class AbstractDataHandling
     {
         return $this->data->timestamp;
     }
+
+    abstract protected function debugOutput(): mixed;
+
+    abstract protected function initData(): void;
 
     /**
      * @throws CacheInstanceException

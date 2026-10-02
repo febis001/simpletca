@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 use Febis\SimpleTca\Exception\NoIdentifierException;
@@ -17,12 +19,14 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  */
 abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 {
-    abstract protected static function getType(): string;
-
-    /** String[] */
-    abstract protected static function getAllowedProperties(): array;
-
-    abstract protected static function getDefaultProperties(): array;
+    /**
+     * Unbuilt shortcut objects per table, keyed by the table they were registered for via buildAll().
+     * DataProcessorUtility reads this to recurse into a referenced table's own DataProcessorInterface
+     * columns (e.g. file fields) — $GLOBALS['TCA'] only ever holds the already-built plain-array form.
+     *
+     * @var array<string, array<string|int, self|array>>
+     */
+    protected static array $originalColumnsByTable = [];
 
     /** For Properties, that are not set by this shortcut, but allowed by TYPO3. Set by withAdditionalAttributes */
     protected ?array $additionalAttributes = null;
@@ -43,9 +47,43 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         protected ?string $identifier = null,
         protected ?string $tablename = null,
     ) {
-        if (!is_null($this->identifier)) {
+        if ($this->identifier !== null) {
             $this->withIdentifier($this->identifier);
         }
+    }
+
+    public function __call(string $name, array $arguments): static
+    {
+        /** match 'with...'-Calls like withEval or withSize, but not for withType */
+        preg_match('/\Awith([A-Z][A-z0-9]+)\z/', $name, $match);
+
+        if (isset($match[0], $match[1]) === false) {
+            return $this;
+        }
+
+        if (
+            in_array(
+                static::toLowerCamelCase($match[1]),
+                static::toLowerCamelCase(static::getAllowedProperties()),
+                true,
+            )
+        ) {
+            $property = self::toLowerCamelCase($match[1]);
+
+            if ($property === 'type') {
+                return $this;
+            }
+
+            $this->unsetAttributes[$property] = empty($arguments[0]);
+
+            if (property_exists(static::class, $property)) {
+                $this->{$property} = $arguments[0];
+            } else {
+                $this->additionalAttributes[$property] = $arguments[0];
+            }
+        }
+
+        return $this;
     }
 
     public function withIdentifier(?string $identifier): static
@@ -101,7 +139,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     {
         foreach ($args as $argName => $arg) {
             if (property_exists(static::class, $argName)) {
-                $this->$argName = $arg;
+                $this->{$argName} = $arg;
             }
         }
 
@@ -122,11 +160,11 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     #[\Override]
     public function build(): array
     {
-        if (null === $this->identifier) {
+        if ($this->identifier === null) {
             throw new NoIdentifierException();
         }
 
-        if (null === $this->tablename) {
+        if ($this->tablename === null) {
             throw new NoTablenameException();
         }
 
@@ -135,6 +173,74 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 
         return $tca;
     }
+
+    /**
+     * Converts every shortcut in a column list into its TCA array, leaving plain arrays untouched.
+     *
+     * @param array<string|int, self|array> $columns
+     */
+    public static function buildAll(array $columns, ?string $table = null): array
+    {
+        if ($table !== null) {
+            self::$originalColumnsByTable[$table] = $columns;
+        }
+
+        return array_map(
+            static fn (self|array $column): array => $column instanceof self ? $column->build() : $column,
+            $columns,
+        );
+    }
+
+    /**
+     * The unbuilt shortcut objects last registered for a table via buildAll(), for recursive
+     * DataProcessorInterface lookups. Empty if the table's columns were never built with a table name.
+     *
+     * @return array<string|int, self|array>
+     */
+    public static function getOriginalColumns(string $table): array
+    {
+        return self::$originalColumnsByTable[$table] ?? [];
+    }
+
+    #[\Override]
+    public function offsetExists(mixed $offset): bool
+    {
+        return property_exists(static::class, $offset);
+    }
+
+    #[\Override]
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->offsetExists($offset) ? $this->{$offset} : null;
+    }
+
+    #[\Override]
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        if ($this->offsetExists($offset)) {
+            $this->{$offset} = $value;
+        }
+    }
+
+    #[\Override]
+    public function offsetUnset(mixed $offset): void
+    {
+        if ($this->offsetExists($offset)) {
+            $this->{$offset} = null;
+        }
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    abstract protected static function getType(): string;
+
+    /** String[] */
+    abstract protected static function getAllowedProperties(): array;
+
+    abstract protected static function getDefaultProperties(): array;
 
     protected function buildContainer(): array
     {
@@ -181,7 +287,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
 
             /** prior attributes that are explicitly defined in class */
             if (property_exists(static::class, $property)) {
-                $value = $this->$property;
+                $value = $this->{$property};
             }
 
             /** if attribute is not defined in class, check if the attribute exists in additionalAttributes */
@@ -193,7 +299,7 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
             $property = static::getAllowedPropertyByLCC($property) ?? $property;
 
             /** set the attribute, or delete it, if it was intentionally reset */
-            if (null !== $value) {
+            if ($value !== null) {
                 if (isset($config[$property]) && is_array($config[$property])) {
                     ArrayUtility::mergeRecursiveWithOverrule($config[$property], $value);
                 } else {
@@ -207,40 +313,6 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
         }
 
         return $config;
-    }
-
-    public function __call(string $name, array $arguments): static
-    {
-        /** match 'with...'-Calls like withEval or withSize, but not for withType */
-        preg_match('/\Awith([A-Z][A-z0-9]+)\z/', $name, $match);
-
-        if (false === isset($match[0], $match[1])) {
-            return $this;
-        }
-
-        if (
-            in_array(
-                static::toLowerCamelCase($match[1]),
-                static::toLowerCamelCase(static::getAllowedProperties()),
-                true,
-            )
-        ) {
-            $property = self::toLowerCamelCase($match[1]);
-
-            if ($property === 'type') {
-                return $this;
-            }
-
-            $this->unsetAttributes[$property] = empty($arguments[0]);
-
-            if (property_exists(static::class, $property)) {
-                $this->$property = $arguments[0];
-            } else {
-                $this->additionalAttributes[$property] = $arguments[0];
-            }
-        }
-
-        return $this;
     }
 
     /**
@@ -263,42 +335,9 @@ abstract class AbstractShortcut implements TcaShortcutInterface, \ArrayAccess
     {
         $filtered = array_filter(
             static::getAllowedProperties(),
-            static fn($property) => static::toLowerCamelCase($property) === $lcc,
+            static fn ($property) => static::toLowerCamelCase($property) === $lcc,
         );
 
         return $filtered !== [] ? reset($filtered) : null;
-    }
-
-    #[\Override]
-    public function offsetExists(mixed $offset): bool
-    {
-        return property_exists(static::class, $offset);
-    }
-
-    #[\Override]
-    public function offsetGet(mixed $offset): mixed
-    {
-        return $this->offsetExists($offset) ? $this->$offset : null;
-    }
-
-    #[\Override]
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        if ($this->offsetExists($offset)) {
-            $this->$offset = $value;
-        }
-    }
-
-    #[\Override]
-    public function offsetUnset(mixed $offset): void
-    {
-        if ($this->offsetExists($offset)) {
-            $this->$offset = null;
-        }
-    }
-
-    public function getIdentifier(): string
-    {
-        return $this->identifier;
     }
 }

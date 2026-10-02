@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -8,10 +10,19 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class SelectSingleShortcut extends AbstractShortcut
 {
+    public function __construct(
+        ?string $identifier = null,
+        protected ?array $items = null,
+        protected ?string $renderType = null,
+    ) {
+        $this->renderType ??= 'selectSingle';
+        parent::__construct($identifier);
+    }
+
     #[\Override]
     protected static function getType(): string
     {
-        return "select";
+        return 'select';
     }
 
     #[\Override]
@@ -27,14 +38,5 @@ class SelectSingleShortcut extends AbstractShortcut
     protected static function getDefaultProperties(): array
     {
         return [];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-        protected ?array $items = null,
-        protected ?string $renderType = null,
-    ) {
-        $this->renderType ??= 'selectSingle';
-        parent::__construct($identifier);
     }
 }

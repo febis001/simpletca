@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -10,10 +12,18 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class NumberShortcut extends AbstractShortcut
 {
+    public function __construct(
+        ?string $identifier = null,
+        protected ?string $format = null,
+        protected ?bool $required = null,
+    ) {
+        parent::__construct($identifier);
+    }
+
     #[\Override]
     protected static function getType(): string
     {
-        return "number";
+        return 'number';
     }
 
     #[\Override]
@@ -31,13 +41,5 @@ class NumberShortcut extends AbstractShortcut
     protected static function getDefaultProperties(): array
     {
         return [];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-        protected ?string $format = null,
-        protected ?bool $required = null,
-    ) {
-        parent::__construct($identifier);
     }
 }

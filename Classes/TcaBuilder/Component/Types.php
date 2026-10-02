@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\TcaBuilder\Component;
 
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -19,6 +21,14 @@ class Types implements ComponentInterface
     public function addAdditionalType(array $type)
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->additionalTypes, $type);
+    }
+
+    #[\Override]
+    public function getArray(): array
+    {
+        return [
+            'types' => array_merge($this->getDefaultType(), $this->additionalTypes),
+        ];
     }
 
     private function getDefaultType(): array
@@ -53,11 +63,5 @@ class Types implements ComponentInterface
         return '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
                     --palette--;;paletteHidden,
                     --palette--;;paletteAccess,';
-    }
-
-    #[\Override]
-    public function getArray(): array
-    {
-        return ['types' => array_merge($this->getDefaultType(), $this->additionalTypes)];
     }
 }

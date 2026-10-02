@@ -40,10 +40,10 @@ install:php:
         paths:
             - bin
 
-lint:phpcs:
+lint:phpecs:
     extends: .php-lint
     script:
-        - composer lint:phpcs
+        - composer lint:phpecs
 
 lint:phpmd:
     extends: .php-lint
@@ -55,12 +55,12 @@ lint:phplint:
     script:
         - composer lint:phplint
 
-test:phpstan:
+lint:phpstan:
     extends: .php-test
     script:
         - composer test:phpstan
 
-test:rector:
+lint:rector:
     extends: .php-test
     script:
         - composer test:rector:dry

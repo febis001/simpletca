@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Febis\SimpleTca\Shortcut;
 
 /**
@@ -7,10 +9,17 @@ namespace Febis\SimpleTca\Shortcut;
  */
 class RadioShortcut extends AbstractShortcut
 {
+    public function __construct(
+        ?string $identifier = null,
+        protected ?array $items = null,
+    ) {
+        parent::__construct($identifier);
+    }
+
     #[\Override]
     protected static function getType(): string
     {
-        return "radio";
+        return 'radio';
     }
 
     #[\Override]
@@ -23,12 +32,5 @@ class RadioShortcut extends AbstractShortcut
     protected static function getDefaultProperties(): array
     {
         return [];
-    }
-
-    public function __construct(
-        ?string $identifier = null,
-        protected ?array $items = null,
-    ) {
-        parent::__construct($identifier);
     }
 }
