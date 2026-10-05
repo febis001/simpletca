@@ -1,0 +1,86 @@
+# Runs semantic-release: analyzes conventional commits since the last tag,
+# bumps the version, updates CHANGELOG.md, tags, creates the GitHub release.
+#
+#   fix: -> patch · feat: -> minor · BREAKING CHANGE/type! -> major
+#   docs/chore/test/ci/refactor/build -> no release
+#
+# SimpleTCA major == TYPO3 major. `master` releases the current major;
+# `NN.x` branches are maintenance releases for older TYPO3 majors (feat/fix
+# only, no major bumps there).
+#
+# Packagist picks up new tags via its GitHub webhook. TER publishing can be
+# appended later (see commented job below) once the extension key is
+# registered on TER.
+
+name: Release
+
+on:
+  push:
+    branches:
+      - master        # current TYPO3 major (e.g. SimpleTCA 14.x for TYPO3 v14)
+      # Branch filters are globs, not regex: `+` is literal, so `[0-9]+.x`
+      # matches nothing; `[0-9]*.x` matches 13.x, 1.x, 123.x.
+      - '[0-9]*.x'    # maintenance branches for older TYPO3 majors (e.g. 13.x)
+
+permissions:
+  contents: write        # tags, releases, changelog commit
+  issues: write          # semantic-release comments on referenced issues
+  pull-requests: write   # semantic-release comments on referenced PRs
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Semantic release
+    runs-on: ubuntu-latest
+    # Skip release commits created by this workflow itself
+    if: "!contains(github.event.head_commit.message, 'chore(release):')"
+    steps:
+      # master requires a PR, so the default GITHUB_TOKEN can't push the
+      # changelog/version commit. Mint a token from the release GitHub App
+      # instead, which is set up as a bypass actor on the master ruleset.
+      - name: Mint release App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # full history for commit analysis
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          npx --yes \
+            -p semantic-release@24 \
+            -p @semantic-release/changelog@6 \
+            -p @semantic-release/git@10 \
+            semantic-release
+
+  # --- Future: TER upload on published release ---
+  # ter-publish:
+  #   needs: release
+  #   runs-on: ubuntu-latest
+  #   if: needs.release.outputs.released == 'true'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: shivammathur/setup-php@v2
+  #       with: { php-version: '8.3' }
+  #     - name: Publish to TER
+  #       env:
+  #         TYPO3_API_TOKEN: ${{ secrets.TYPO3_API_TOKEN }}
+  #       run: |
+  #         composer global require typo3/tailor
+  #         ~/.composer/vendor/bin/tailor ter:publish "${{ needs.release.outputs.version }}"
