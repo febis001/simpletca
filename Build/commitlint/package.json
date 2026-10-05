@@ -1,0 +1,9 @@
+{
+    "name": "simpletca-commitlint",
+    "private": true,
+    "description": "Commitlint tooling for the commitlint GitHub Actions workflow. Kept outside the repo root so it does not pollute the composer package.",
+    "devDependencies": {
+        "@commitlint/cli": "^19.8.1",
+        "@commitlint/config-conventional": "^19.8.1"
+    }
+}
