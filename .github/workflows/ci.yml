@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install:
+    name: Install dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Cache composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.json') }}
+          restore-keys: composer-
+
+      - name: Install
+        run: composer install --no-progress --no-interaction
+
+  lint:
+    name: ${{ matrix.script }}
+    runs-on: ubuntu-latest
+    needs: install
+    strategy:
+      fail-fast: false
+      matrix:
+        script: ['lint:phpcs', 'lint:phpmd', 'lint:phplint']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+
+      - name: Restore composer cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.json') }}
+
+      - name: Install (cache warm-up fallback)
+        run: composer install --no-progress --no-interaction
+
+      - name: Run ${{ matrix.script }}
+        run: composer ${{ matrix.script }}
+
+  test:
+    name: ${{ matrix.script }}
+    runs-on: ubuntu-latest
+    needs: install
+    strategy:
+      fail-fast: false
+      matrix:
+        script: ['test:phpstan', 'test:rector:dry']
+        # NOTE: add 'test:unit' and 'test:functional' here once a test suite exists.
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          extensions: pdo_sqlite
+
+      - name: Restore composer cache
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.json') }}
+
+      - name: Install (cache warm-up fallback)
+        run: composer install --no-progress --no-interaction
+
+      - name: Run ${{ matrix.script }}
+        run: composer ${{ matrix.script }}

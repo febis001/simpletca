@@ -1,0 +1,59 @@
+# Enforces Conventional Commits on every PR — the release workflow's version
+# calculation depends on it. Checks all commits of the PR and the PR title
+# (relevant if a squash merge is used).
+
+name: Commitlint
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  commitlint:
+    name: Conventional commits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: npm
+          cache-dependency-path: Build/commitlint/package-lock.json
+
+      # npx -p doesn't put the installed packages on the module resolution
+      # path, so --extends can't find them. Install relative to the config
+      # file instead.
+      - name: Install commitlint
+        working-directory: Build/commitlint
+        run: npm ci
+
+      - name: Lint PR commits
+        run: |
+          Build/commitlint/node_modules/.bin/commitlint \
+            --config Build/commitlint/commitlint.config.cjs \
+            --from ${{ github.event.pull_request.base.sha }} \
+            --to ${{ github.event.pull_request.head.sha }} \
+            --verbose
+
+      - name: Lint PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          echo "$PR_TITLE" | Build/commitlint/node_modules/.bin/commitlint \
+            --config Build/commitlint/commitlint.config.cjs --verbose
+
+      - name: Reject AI attribution trailers
+        run: |
+          if git log --format='%B' ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} \
+             | grep -iE '^co-authored-by:.*(copilot|claude|chatgpt|\bgpt\b|\bai\b)|^generated[- ]by:' ; then
+            echo "::error::Commit messages must not contain AI attribution trailers."
+            exit 1
+          fi
+          echo "OK — no attribution trailers found."
